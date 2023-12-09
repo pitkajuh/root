@@ -17,10 +17,7 @@ from time import sleep as timeSleep
 from sys import platform
 from os import path
 import sys
-if sys.hexversion >= 0x3000000:
-    import queue
-else:
-    import Queue as queue
+import queue
 
 from JupyROOT import helpers
 
@@ -96,7 +93,7 @@ class Poller(Thread):
     def Stop(self):
         if self.is_alive():
             self.queue.put(None)
-            self.join() 
+            self.join()
 
 class Runner(object):
     ''' Asynchrously run functions
@@ -196,4 +193,3 @@ def RunAsyncAndPrint(executor, code, ioHandler, printFunction, displayFunction, 
 def Display(displayer, displayFunction):
     displayer.AsyncRun(displayFunction)
     displayer.Wait()
-

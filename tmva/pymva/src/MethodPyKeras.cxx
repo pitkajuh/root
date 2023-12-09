@@ -625,7 +625,6 @@ void MethodPyKeras::Train() {
          fTrainHistory.AddValue(name,i+1,fHistory[i]);
 
    }
-//#endif
 
    /*
     * Store trained model to file (only if option 'SaveBestOnly' is NOT activated,

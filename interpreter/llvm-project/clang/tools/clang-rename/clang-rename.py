@@ -22,7 +22,6 @@ you would like to rename and press '<leader>cr'. You will be prompted for a new
 name if the cursor points to a valid symbol.
 '''
 
-from __future__ import absolute_import, division, print_function
 import vim
 import subprocess
 import sys

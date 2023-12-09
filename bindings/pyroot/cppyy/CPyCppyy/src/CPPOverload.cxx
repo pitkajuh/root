@@ -2,15 +2,8 @@
 #include "CPyCppyy.h"
 #include "CPyCppyy/Reflex.h"
 #include "structmember.h"    // from Python
-#if PY_VERSION_HEX < 0x02050000
-#include "compile.h"         // from Python
-#elif PY_VERSION_HEX < 0x030b0000
 #include "code.h"            // from Python
-#endif
-#ifndef CO_NOFREE
-// python2.2 does not have CO_NOFREE defined
 #define CO_NOFREE       0x0040
-#endif
 #include "CPPOverload.h"
 #include "CPPInstance.h"
 #include "CallContext.h"
@@ -590,7 +583,7 @@ static PyObject* mp_call(CPPOverload* pymeth, PyObject* args, PyObject* kwds)
     // fall through: python is dynamic, and so, the hashing isn't infallible
         PyErr_Clear();
     }
-    
+
 // ... otherwise loop over all methods and find the one that does not fail
     if (!IsSorted(mflags)) {
         std::stable_sort(methods.begin(), methods.end(), PriorityCmp);
@@ -1011,11 +1004,11 @@ PyObject* CPyCppyy::CPPOverload::FindOverload(const std::string& signature, int 
 PyObject* CPyCppyy::CPPOverload::FindOverload(PyObject *args_tuple, int want_const)
 {
     Py_ssize_t n = PyTuple_Size(args_tuple);
-    
+
     CPPOverload::Methods_t& methods = fMethodInfo->fMethods;
 
     // This value is set based on the maximum penalty in Cppyy::CompareMethodArgType
-    Py_ssize_t min_score = INT_MAX; 
+    Py_ssize_t min_score = INT_MAX;
     bool found = false;
     size_t best_method = 0, method_index = 0;
 
@@ -1054,7 +1047,7 @@ PyObject* CPyCppyy::CPPOverload::FindOverload(PyObject *args_tuple, int want_con
         PyErr_Format(PyExc_LookupError, "signature with arguments \"%s\" not found", sigargs.c_str());
         return (PyObject*) nullptr;
     }
-        
+
     CPPOverload* newmeth = mp_new(nullptr, nullptr, nullptr);
     CPPOverload::Methods_t vec;
     vec.push_back(methods[best_method]->Clone());
@@ -1065,7 +1058,7 @@ PyObject* CPyCppyy::CPPOverload::FindOverload(PyObject *args_tuple, int want_con
         newmeth->fSelf = fSelf;
     }
     newmeth->fMethodInfo->fFlags = fMethodInfo->fFlags;
-        
+
     return (PyObject*) newmeth;
 }
 
