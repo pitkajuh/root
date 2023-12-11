@@ -11,9 +11,6 @@
 from . import pythonization
 from libcppyy import SetOwnership
 
-import sys
-
-
 # Item access
 
 def _check_type(idx, msg):

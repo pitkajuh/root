@@ -63,9 +63,7 @@ if vim.eval('exists("g:clang_format_fallback_style")') == "1":
   fallback_style = vim.eval('g:clang_format_fallback_style')
 
 def get_buffer(encoding):
-  if platform.python_version_tuple()[0] == '3':
-    return vim.current.buffer
-  return [ line.decode(encoding) for line in vim.current.buffer ]
+  return vim.current.buffer
 
 def main():
   # Get the current text.
