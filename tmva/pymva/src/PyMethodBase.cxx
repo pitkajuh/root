@@ -7,7 +7,7 @@
  * Class  : PyMethodBase                                                          *
  *                                                                                *
  * Description:                                                                   *
- *      Virtual base class for all MVA method based on python                     *
+ *      Virtual base class for all MVA method based on python//                   *
  *                                                                                *
  **********************************************************************************/
 
