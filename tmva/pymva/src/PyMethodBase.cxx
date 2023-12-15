@@ -50,16 +50,15 @@ TString Python_Executable() {
    // on Windows there is a space before the version and the executable is python.exe
    // for both versions of Python
    python_version.ReplaceAll(" ", "");
-   if (python_version[0] == '2' || python_version[0] == '3')
+   if (python_version[0] == '3')
       return "python";
 #endif
-   if (python_version[0] == '2')
-      return "python";
-   else if (python_version[0] == '3')
+   if (python_version[0] == '3')
       return "python3";
-
-   TMVA::gTools().Log() << kFATAL << "Invalid Python version used to build ROOT : " << python_version << Endl;
-   return nullptr;
+   else {
+      TMVA::gTools().Log() << kFATAL << "Invalid Python version used to build ROOT : " << python_version << Endl;
+      return nullptr;
+   }
 }
 
 } // namespace TMVA
@@ -179,17 +178,6 @@ void PyMethodBase::PyInitialize()
    }
    Py_INCREF(fGlobalNS);
 
-   #if PY_MAJOR_VERSION < 3
-   //preparing objects for eval
-   PyObject *bName =  PyUnicode_FromString("__builtin__");
-   // Import the file as a Python module.
-   // returns a new reference
-   fModuleBuiltin = PyImport_Import(bName);
-   if (!fModuleBuiltin) {
-      Log << kFATAL << "Can't import __builtin__" << Endl;
-      Log << Endl;
-   }
-   #else
    //preparing objects for eval
    PyObject *bName =  PyUnicode_FromString("builtins");
    // Import the file as a Python module.
@@ -198,7 +186,6 @@ void PyMethodBase::PyInitialize()
       Log << kFATAL << "Can't import builtins" << Endl;
       Log << Endl;
    }
-   #endif
 
    // note mDict is a borrowed reference
    PyObject *mDict = PyModule_GetDict(fModuleBuiltin);
