@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 #-----------------------------------------------------------------------------
 #  Authors: Omar Zapata <Omar.Zapata@cern.ch> http://oproject.org
@@ -13,8 +13,6 @@
 # For the licensing terms see $ROOTSYS/LICENSE.                                #
 # For the list of contributors see $ROOTSYS/README/CREDITS.                    #
 ################################################################################
-
-from __future__ import print_function
 
 import sys
 

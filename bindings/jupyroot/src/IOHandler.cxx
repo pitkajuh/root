@@ -193,8 +193,6 @@ bool JupyROOTDeclarerImpl(const char *code)
 #if PY_MAJOR_VERSION >= 3
     #define PyInt_FromLong PyLong_FromLong
     #define PyText_FromString PyUnicode_FromString
-#else
-    #define PyText_FromString PyString_FromString
 #endif
 
 PyObject *JupyROOTExecutor(PyObject * /*self*/, PyObject * args)

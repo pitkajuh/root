@@ -13,8 +13,6 @@
 ################################################################################
 
 
-from __future__ import print_function
-
 import os
 import sys
 import select
@@ -694,4 +692,3 @@ def iPythonize():
     #enableCppHighlighting()
     enhanceROOTModule()
     welcomeMsg()
-
