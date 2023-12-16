@@ -79,64 +79,6 @@ typedef dim_t* dims_t;
 #endif
 
 // for 3.0 support (backwards compatibility, really)
-#if PY_VERSION_HEX < 0x03000000
-#define PyBytes_Check                  PyString_Check
-#define PyBytes_CheckExact             PyString_CheckExact
-#define PyBytes_AS_STRING              PyString_AS_STRING
-#define PyBytes_AsString               PyString_AsString
-#define PyBytes_GET_SIZE               PyString_GET_SIZE
-#define PyBytes_Size                   PyString_Size
-#define PyBytes_FromFormat             PyString_FromFormat
-#define PyBytes_FromString             PyString_FromString
-#define PyBytes_FromStringAndSize      PyString_FromStringAndSize
-
-#define PyBytes_Type    PyString_Type
-
-#define CPyCppyy_PyText_Check                 PyString_Check
-#define CPyCppyy_PyText_CheckExact            PyString_CheckExact
-#define CPyCppyy_PyText_AsString              PyString_AS_STRING
-#define CPyCppyy_PyText_AsStringChecked       PyString_AsString
-#define CPyCppyy_PyText_GET_SIZE              PyString_GET_SIZE
-#define CPyCppyy_PyText_GetSize               PyString_Size
-#define CPyCppyy_PyText_FromFormat            PyString_FromFormat
-#define CPyCppyy_PyText_FromString            PyString_FromString
-#define CPyCppyy_PyText_InternFromString      PyString_InternFromString
-#define CPyCppyy_PyText_Append                PyString_Concat
-#define CPyCppyy_PyText_AppendAndDel          PyString_ConcatAndDel
-#define CPyCppyy_PyText_FromStringAndSize     PyString_FromStringAndSize
-
-static inline const char* CPyCppyy_PyText_AsStringAndSize(PyObject* pystr, Py_ssize_t* size)
-{
-    const char* cstr = CPyCppyy_PyText_AsStringChecked(pystr);
-    if (cstr) *size = CPyCppyy_PyText_GetSize(pystr);
-    return cstr;
-}
-
-#define CPyCppyy_PyText_Type PyString_Type
-
-#define CPyCppyy_PyUnicode_GET_SIZE           PyUnicode_GET_SIZE
-
-static inline PyObject* CPyCppyy_PyCapsule_New(
-        void* cobj, const char* /* name */, void (*destr)(void*))
-{
-    return PyCObject_FromVoidPtr(cobj, destr);
-}
-#define CPyCppyy_PyCapsule_CheckExact    PyCObject_Check
-static inline void* CPyCppyy_PyCapsule_GetPointer(PyObject* capsule, const char* /* name */)
-{
-    return (void*)PyCObject_AsVoidPtr(capsule);
-}
-
-#define CPPYY__long__ "__long__"
-#define CPPYY__idiv__ "__idiv__"
-#define CPPYY__div__  "__div__"
-#define CPPYY__next__ "next"
-
-typedef long Py_hash_t;
-
-#endif  // ! 3.0
-
-// for 3.0 support (backwards compatibility, really)
 #if PY_VERSION_HEX >= 0x03000000
 #define CPyCppyy_PyText_Check              PyUnicode_Check
 #define CPyCppyy_PyText_CheckExact         PyUnicode_CheckExact
@@ -210,49 +152,16 @@ static inline const char* CPyCppyy_PyText_AsStringAndSize(PyObject* pystr, Py_ss
 #define CPyCppyy_PySliceCast   PySliceObject*
 #endif  // >= 3.2
 
-// feature of 3.0 not in 2.5 and earlier
-#if PY_VERSION_HEX < 0x02060000
-#define PyVarObject_HEAD_INIT(type, size)                                     \
-    PyObject_HEAD_INIT(type) size,
-#define Py_TYPE(ob)             (((PyObject*)(ob))->ob_type)
-#endif
-
 // API changes in 2.5 (int -> Py_ssize_t) and 3.2 (PyUnicodeObject -> PyObject)
 #if PY_VERSION_HEX < 0x03020000
 static inline Py_ssize_t CPyCppyy_PyUnicode_AsWideChar(PyObject* pyobj, wchar_t* w, Py_ssize_t size)
 {
-#if PY_VERSION_HEX < 0x02050000
-     return (Py_ssize_t)PyUnicode_AsWideChar((PyUnicodeObject*)pyobj, w, (int)size);
-#else
-     return PyUnicode_AsWideChar((PyUnicodeObject*)pyobj, w, size);
-#endif
+   return PyUnicode_AsWideChar((PyUnicodeObject*)pyobj, w, size);
 }
 #else
 #define CPyCppyy_PyUnicode_AsWideChar PyUnicode_AsWideChar
 #endif
 
-// backwards compatibility, pre python 2.5
-#if PY_VERSION_HEX < 0x02050000
-typedef int Py_ssize_t;
-#define PyInt_AsSsize_t PyInt_AsLong
-#define PyInt_FromSsize_t PyInt_FromLong
-# define PY_SSIZE_T_FORMAT "%d"
-# if !defined(PY_SSIZE_T_MIN)
-#  define PY_SSIZE_T_MAX INT_MAX
-#  define PY_SSIZE_T_MIN INT_MIN
-# endif
-#define ssizeobjargproc intobjargproc
-#define lenfunc         inquiry
-#define ssizeargfunc    intargfunc
-
-#define PyIndex_Check(obj)                                                    \
-    (PyInt_Check(obj) || PyLong_Check(obj))
-
-inline Py_ssize_t PyNumber_AsSsize_t(PyObject* obj, PyObject*) {
-    return (Py_ssize_t)PyLong_AsLong(obj);
-}
-
-#else
 # ifdef R__MACOSX
 #  if SIZEOF_SIZE_T == SIZEOF_INT
 #    if defined(MAC_OS_X_VERSION_10_4)
@@ -266,11 +175,6 @@ inline Py_ssize_t PyNumber_AsSsize_t(PyObject* obj, PyObject*) {
 # else
 #  define PY_SSIZE_T_FORMAT "%zd"
 # endif
-#endif
-
-#if PY_VERSION_HEX < 0x02020000
-#define PyBool_FromLong  PyInt_FromLong
-#endif
 
 #if PY_VERSION_HEX < 0x03000000
 // the following should quiet Solaris

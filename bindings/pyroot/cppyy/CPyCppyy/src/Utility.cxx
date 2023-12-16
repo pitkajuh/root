@@ -108,11 +108,7 @@ namespace {
             gC2POperatorMapping["->"]  = "__follow__";      // not an actual python operator
             gC2POperatorMapping["="]   = "__assign__";      // id.
 
-#if PY_VERSION_HEX < 0x03000000
-            gC2POperatorMapping["bool"] = "__nonzero__";
-#else
             gC2POperatorMapping["bool"] = "__bool__";
-#endif
         }
     } initOperatorMapping_;
 
@@ -375,10 +371,6 @@ static bool AddTypeName(std::string& tmpl_name, PyObject* tn, PyObject* arg,
 
     if (tn == (PyObject*)&PyInt_Type) {
         if (arg) {
-#if PY_VERSION_HEX < 0x03000000
-            long l = PyInt_AS_LONG(arg);
-            tmpl_name.append((l < INT_MIN || INT_MAX < l) ? "long" : "int");
-#else
              Long64_t ll = PyLong_AsLongLong(arg);
              if (ll == (Long64_t)-1 && PyErr_Occurred()) {
                  PyErr_Clear();
@@ -391,34 +383,12 @@ static bool AddTypeName(std::string& tmpl_name, PyObject* tn, PyObject* arg,
              } else
                  tmpl_name.append((ll < INT_MIN || INT_MAX < ll) ? \
                      ((ll < LONG_MIN || LONG_MAX < ll) ? "Long64_t" : "long") : "int");
-#endif
         } else
             tmpl_name.append("int");
-#if PY_VERSION_HEX < 0x03000000
-    } else if (tn == (PyObject*)&PyLong_Type) {
-        if (arg) {
-             Long64_t ll = PyLong_AsLongLong(arg);
-             if (ll == (Long64_t)-1 && PyErr_Occurred()) {
-                 PyErr_Clear();
-                 ULong64_t ull = PyLong_AsUnsignedLongLong(arg);
-                 if (ull == (ULong64_t)-1 && PyErr_Occurred()) {
-                     PyErr_Clear();
-                     tmpl_name.append("long");   // still out of range, will fail later
-                 } else
-                     tmpl_name.append("ULong64_t");   // since already failed long long
-             } else
-                 tmpl_name.append((ll < LONG_MIN || LONG_MAX < ll) ? "Long64_t" : "long");
-        } else
-            tmpl_name.append("long");
-#endif
     } else if (tn == (PyObject*)&PyFloat_Type) {
     // special case for floats (Python-speak for double) if from argument (only)
         tmpl_name.append(arg ? "double" : "float");
-#if PY_VERSION_HEX < 0x03000000
-    } else if (tn == (PyObject*)&PyString_Type) {
-#else
     } else if (tn == (PyObject*)&PyUnicode_Type) {
-#endif
         tmpl_name.append("std::string");
     } else if (tn == (PyObject*)&PyList_Type || tn == (PyObject*)&PyTuple_Type) {
         if (arg && PySequence_Size(arg)) {
@@ -728,18 +698,10 @@ Py_ssize_t CPyCppyy::Utility::GetBuffer(PyObject* pyobject, char tc, int size, v
 
     PySequenceMethods* seqmeths = Py_TYPE(pyobject)->tp_as_sequence;
     if (seqmeths != 0 && bufprocs != 0
-#if  PY_VERSION_HEX < 0x03000000
-         && bufprocs->bf_getwritebuffer != 0
-         && (*(bufprocs->bf_getsegcount))(pyobject, 0) == 1
-#else
          && bufprocs->bf_getbuffer != 0
-#endif
         ) {
 
-   // get the buffer
-#if PY_VERSION_HEX < 0x03000000
-        Py_ssize_t buflen = (*(bufprocs->bf_getwritebuffer))(pyobject, 0, &buf);
-#else
+        // get the buffer
         Py_buffer bufinfo;
         (*(bufprocs->bf_getbuffer))(pyobject, &bufinfo, PyBUF_WRITABLE);
         buf = (char*)bufinfo.buf;
@@ -748,7 +710,6 @@ Py_ssize_t CPyCppyy::Utility::GetBuffer(PyObject* pyobject, char tc, int size, v
         PyBuffer_Release(pyobject, &bufinfo);
 #else
         PyBuffer_Release(&bufinfo);
-#endif
 #endif
 
         if (buf && check == true) {

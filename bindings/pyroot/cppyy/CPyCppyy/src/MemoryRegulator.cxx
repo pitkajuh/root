@@ -52,10 +52,6 @@ struct InitCPyCppyy_NoneType_t {
         CPyCppyy_NoneType.tp_dealloc     = (destructor)&InitCPyCppyy_NoneType_t::DeAlloc;
         CPyCppyy_NoneType.tp_repr        = Py_TYPE(Py_None)->tp_repr;
         CPyCppyy_NoneType.tp_richcompare = (richcmpfunc)&InitCPyCppyy_NoneType_t::RichCompare;
-#if PY_VERSION_HEX < 0x03000000
-    // tp_compare has become tp_reserved (place holder only) in p3
-        CPyCppyy_NoneType.tp_compare     = (cmpfunc)&InitCPyCppyy_NoneType_t::Compare;
-#endif
         CPyCppyy_NoneType.tp_hash        = (hashfunc)&InitCPyCppyy_NoneType_t::PtrHash;
 
         CPyCppyy_NoneType.tp_as_mapping  = &CPyCppyy_NoneType_mapping;
@@ -71,12 +67,8 @@ struct InitCPyCppyy_NoneType_t {
     }
 
     static int Compare(PyObject*, PyObject* other) {
-#if PY_VERSION_HEX < 0x03000000
-        return PyObject_Compare(other, Py_None);
-#else
     // TODO the following isn't correct as it doesn't order, but will do for now ...
         return !PyObject_RichCompareBool(other, Py_None, Py_EQ);
-#endif
     }
 };
 

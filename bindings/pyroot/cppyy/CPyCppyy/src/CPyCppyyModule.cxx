@@ -90,37 +90,16 @@ static int nullptr_nonzero(PyObject*)
 }
 
 static PyNumberMethods nullptr_as_number = {
-    0, 0, 0,
-#if PY_VERSION_HEX < 0x03000000
-    0,
-#endif
-    0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
     (inquiry)nullptr_nonzero,           // tp_nonzero (nb_bool in p3)
-    0, 0, 0, 0, 0, 0,
-#if PY_VERSION_HEX < 0x03000000
-    0,                                  // nb_coerce
-#endif
-    0, 0, 0,
-#if PY_VERSION_HEX < 0x03000000
-    0, 0,
-#endif
-    0, 0, 0,
-#if PY_VERSION_HEX < 0x03000000
-    0,                                  // nb_inplace_divide
-#endif
-    0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02020000
-    , 0                                 // nb_floor_divide
-#if PY_VERSION_HEX < 0x03000000
-    , 0                                 // nb_true_divide
-#else
-    , 0                                 // nb_true_divide
-#endif
-    , 0, 0
-#endif
-#if PY_VERSION_HEX >= 0x02050000
-    , 0                                 // nb_index
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,
+    0,                                  // nb_floor_divide
+    0,                                  // nb_true_divide
+    0,
+    0,
+    0                                   // nb_index
 #if PY_VERSION_HEX >= 0x03050000
     , 0                                 // nb_matrix_multiply
     , 0                                 // nb_inplace_matrix_multiply
@@ -139,13 +118,9 @@ static PyTypeObject PyNullPtr_t_Type = {
     0, 0,
     (hashfunc)_Py_HashPointer, // tp_hash
     0, 0, 0, 0, 0, Py_TPFLAGS_DEFAULT, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                  // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                  // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                   // tp_del
+    0                    // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                  // tp_finalize
 #endif
@@ -499,11 +474,8 @@ static PyObject* AsCapsule(PyObject* /* dummy */, PyObject* args, PyObject* kwds
 // Return object proxy as an opaque PyCapsule.
     void* addr = GetCPPInstanceAddress("as_capsule", args, kwds);
     if (addr)
-#if PY_VERSION_HEX < 0x02060000
-        return PyCObject_FromVoidPtr(addr, nullptr);
-#else
         return PyCapsule_New(addr, nullptr, nullptr);
-#endif
+
     return nullptr;
 }
 

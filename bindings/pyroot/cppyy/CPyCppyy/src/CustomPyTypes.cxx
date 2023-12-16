@@ -13,13 +13,8 @@
 // same, because the actual C++ type of the PyObject is PyMethodObject anyway.
 #define CustomInstanceMethod_GET_SELF(meth) reinterpret_cast<PyMethodObject *>(meth)->im_self
 #define CustomInstanceMethod_GET_FUNCTION(meth) reinterpret_cast<PyMethodObject *>(meth)->im_func
-#if PY_VERSION_HEX >= 0x03000000
 // TODO: this will break functionality
 #define CustomInstanceMethod_GET_CLASS(meth) Py_None
-#else
-#define CustomInstanceMethod_GET_CLASS(meth) PyMethod_GET_CLASS(meth)
-#endif
-
 
 namespace CPyCppyy {
 
@@ -33,13 +28,9 @@ PyTypeObject RefFloat_Type = {     // python float is a C/C++ double
     (char*)"CPyCppyy float object for pass by reference",   // tp_doc
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     &PyFloat_Type,                 // tp_base
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                            // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                            // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                             // tp_del
+    0                              // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                            // tp_finalize
 #endif
@@ -59,13 +50,9 @@ PyTypeObject RefInt_Type = {       // python int is a C/C++ long
     (char*)"CPyCppyy long object for pass by reference",    // tp_doc
     0, 0, 0, 0, 0, 0, 0, 0, 0,
     &PyInt_Type,                   // tp_base
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                            // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                            // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                             // tp_del
+    0                              // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                            // tp_finalize
 #endif
@@ -88,13 +75,9 @@ PyTypeObject TypedefPointerToClass_Type = {
     (ternaryfunc)tpc_call,        // tp_call
     0, 0, 0, 0,
     Py_TPFLAGS_DEFAULT,           // tp_flags
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                           // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                           // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                            // tp_del
+    0                             // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                           // tp_finalize
 #endif
@@ -109,9 +92,6 @@ static int numfree = 0;
 
 //-----------------------------------------------------------------------------
 PyObject* CustomInstanceMethod_New(PyObject* func, PyObject* self, PyObject*
-#if PY_VERSION_HEX < 0x03000000
-        pyclass
-#endif
     )
 {
 // from instancemethod, but with custom type (at issue is that instancemethod is not
@@ -139,10 +119,6 @@ PyObject* CustomInstanceMethod_New(PyObject* func, PyObject* self, PyObject*
     im->im_func = func;
     Py_XINCREF(self);
     im->im_self = self;
-#if PY_VERSION_HEX < 0x03000000
-    Py_XINCREF(pyclass);
-    im->im_class = pyclass;
-#endif
     PyObject_GC_Track(im);
     return (PyObject*)im;
 }
@@ -159,9 +135,6 @@ static void im_dealloc(PyMethodObject* im)
 
     Py_DECREF(im->im_func);
     Py_XDECREF(im->im_self);
-#if PY_VERSION_HEX < 0x03000000
-    Py_XDECREF(im->im_class);
-#endif
 
     if (numfree < PyMethod_MAXFREELIST) {
         im->im_self = (PyObject*)free_list;
@@ -223,10 +196,6 @@ static PyObject* im_descr_get(PyObject* meth, PyObject* obj, PyObject* pyclass)
 // from instancemethod: don't rebind an already bound method, or an unbound method
 // of a class that's not a base class of pyclass
     if (CustomInstanceMethod_GET_SELF(meth)
-#if PY_VERSION_HEX < 0x03000000
-         || (CustomInstanceMethod_GET_CLASS(meth) &&
-             !PyObject_IsSubclass(pyclass, CustomInstanceMethod_GET_CLASS(meth)))
-#endif
             ) {
         Py_INCREF(meth);
         return meth;
@@ -254,13 +223,9 @@ PyTypeObject CustomInstanceMethod_Type = {
     &PyMethod_Type,                // tp_base
     0,
     im_descr_get,                  // tp_descr_get
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                            // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                            // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                             // tp_del
+    0                              // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                            // tp_finalize
 #endif
@@ -304,13 +269,9 @@ PyTypeObject IndexIter_Type = {
     0, 0, 0,
     PyObject_SelfIter,            // tp_iter
     (iternextfunc)indexiter_iternext,  // tp_iternext
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                           // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                           // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                            // tp_del
+    0                             // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                           // tp_finalize
 #endif
@@ -363,13 +324,9 @@ PyTypeObject VectorIter_Type = {
     0, 0, 0,
     PyObject_SelfIter,            // tp_iter
     (iternextfunc)vectoriter_iternext,      // tp_iternext
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                           // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                           // tp_version_tag
-#endif
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                            // tp_del
+    0                             // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                           // tp_finalize
 #endif

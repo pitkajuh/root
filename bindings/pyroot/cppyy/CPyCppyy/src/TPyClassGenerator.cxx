@@ -53,7 +53,7 @@ TClass* TPyClassGenerator::GetClass( const char* name, bool load, bool silent )
       return 0;
 
    PyGILRAII thePyGILRAII;
-   
+
 // first, check whether the name is of a module
    PyObject* modules = PySys_GetObject( const_cast<char*>("modules") );
    PyObject* pyname = PyROOT_PyUnicode_FromString( name );
@@ -201,13 +201,7 @@ TClass* TPyClassGenerator::GetClass( const char* name, bool load, bool silent )
             continue;    // skip all other python special funcs
 
       // figure out number of variables required
-#if PY_VERSION_HEX < 0x03000000
-         PyObject* im_func = PyObject_GetAttrString( attr, (char*)"im_func" );
-         PyObject* func_code =
-            im_func ? PyObject_GetAttrString( im_func, (char*)"func_code" ) : NULL;
-#else
          PyObject* func_code = PyObject_GetAttrString( attr, "__code__" );
-#endif
          PyObject* var_names =
             func_code ? PyObject_GetAttrString( func_code, (char*)"co_varnames" ) : NULL;
          if (PyErr_Occurred()) PyErr_Clear(); // happens for slots; default to 0 arguments
@@ -216,9 +210,6 @@ TClass* TPyClassGenerator::GetClass( const char* name, bool load, bool silent )
          if ( nVars < 0 ) nVars = 0;
          Py_XDECREF( var_names );
          Py_XDECREF( func_code );
-#if PY_VERSION_HEX < 0x03000000
-         Py_XDECREF( im_func );
-#endif
 
       // method declaration as appropriate
          if ( isConstructor ) {

@@ -779,12 +779,11 @@ PyObject* SharedPtrInit(PyObject* self, PyObject* args, PyObject* /* kwds */)
 
 
 //- string behavior as primitives --------------------------------------------
-#if PY_VERSION_HEX >= 0x03000000
 // TODO: this is wrong, b/c it doesn't order
 static int PyObject_Compare(PyObject* one, PyObject* other) {
     return !PyObject_RichCompareBool(one, other, Py_EQ);
 }
-#endif
+
 static inline PyObject* CPyCppyy_PyString_FromCppString(std::string* s) {
     return CPyCppyy_PyText_FromStringAndSize(s->c_str(), s->size());
 }
@@ -1214,7 +1213,7 @@ bool CPyCppyy::Pythonize(PyObject* pyclass, const std::string& name)
         Utility::AddToClass(pyclass, "__cpp_real", "real");
         PyObject_SetAttrString(pyclass, "real", PyDescr_NewGetSet((PyTypeObject*)pyclass, &realComplex));
         Utility::AddToClass(pyclass, "__cpp_imag", "imag");
-        PyObject_SetAttrString(pyclass, "imag", PyDescr_NewGetSet((PyTypeObject*)pyclass, &imagComplex)); 
+        PyObject_SetAttrString(pyclass, "imag", PyDescr_NewGetSet((PyTypeObject*)pyclass, &imagComplex));
         Utility::AddToClass(pyclass, "__complex__", (PyCFunction)ComplexComplex, METH_NOARGS);
         Utility::AddToClass(pyclass, "__repr__", (PyCFunction)ComplexRepr, METH_NOARGS);
     }

@@ -71,14 +71,10 @@ PyTypeObject InstanceArrayIter_Type = {
     PyObject_SelfIter,            // tp_iter
     (iternextfunc)ia_iternext,    // tp_iternext
     0, 0, ia_getset, 0, 0, 0, 0,
-    0,                   // tp_getset
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                           // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                           // tp_version_tag
-#endif
+    0,                            // tp_getset
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0,                            // tp_del
+    0                             // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                           // tp_finalize
 #endif
@@ -201,13 +197,9 @@ PyTypeObject TupleOfInstances_Type = {
     0,                             // tp_mro
     0,                             // tp_cache
     0,                             // tp_subclasses
-    0                              // tp_weaklist
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                            // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                            // tp_version_tag
-#endif
+    0,                             // tp_weaklist
+    0,                             // tp_del
+    0                              // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                            // tp_finalize
 #endif

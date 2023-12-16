@@ -296,73 +296,9 @@ static PyObject* mp_func_closure(CPPOverload* /* pymeth */, void*)
 static PyObject* mp_func_code(CPPOverload* pymeth, void*)
 {
 // Code details are used in module inspect to fill out interactive help()
-#if PY_VERSION_HEX < 0x03000000
-    CPPOverload::Methods_t& methods = pymeth->fMethodInfo->fMethods;
-
-// collect arguments only if there is just 1 overload, otherwise put in a
-// fake *args (see below for co_varnames)
-    PyObject* co_varnames = methods.size() == 1 ? methods[0]->GetCoVarNames() : nullptr;
-    if (!co_varnames) {
-    // TODO: static methods need no 'self' (but is harmless otherwise)
-        co_varnames = PyTuple_New(1 /* self */ + 1 /* fake */);
-        PyTuple_SET_ITEM(co_varnames, 0, CPyCppyy_PyText_FromString("self"));
-        PyTuple_SET_ITEM(co_varnames, 1, CPyCppyy_PyText_FromString("*args"));
-    }
-
-    int co_argcount = (int)PyTuple_Size(co_varnames);
-
-// for now, code object representing the statement 'pass'
-    PyObject* co_code = PyString_FromStringAndSize("d\x00\x00S", 4);
-
-// tuples with all the const literals used in the function
-    PyObject* co_consts = PyTuple_New(0);
-    PyObject* co_names = PyTuple_New(0);
-
-// names, freevars, and cellvars go unused
-    PyObject* co_unused = PyTuple_New(0);
-
-// filename is made-up
-    PyObject* co_filename = PyString_FromString("cppyy.py");
-
-// name is the function name, also through __name__ on the function itself
-    PyObject* co_name = PyString_FromString(pymeth->GetName().c_str());
-
-// firstlineno is the line number of first function code in the containing scope
-
-// lnotab is a packed table that maps instruction count and line number
-    PyObject* co_lnotab = PyString_FromString("\x00\x01\x0c\x01");
-
-    PyObject* code = (PyObject*)PyCode_New(
-        co_argcount,                             // argcount
-        co_argcount+1,                           // nlocals
-        2,                                       // stacksize
-        CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE, // flags
-        co_code,                                 // code
-        co_consts,                               // consts
-        co_names,                                // names
-        co_varnames,                             // varnames
-        co_unused,                               // freevars
-        co_unused,                               // cellvars
-        co_filename,                             // filename
-        co_name,                                 // name
-        1,                                       // firstlineno
-        co_lnotab);                              // lnotab
-
-    Py_DECREF(co_lnotab);
-    Py_DECREF(co_name);
-    Py_DECREF(co_unused);
-    Py_DECREF(co_filename);
-    Py_DECREF(co_varnames);
-    Py_DECREF(co_names);
-    Py_DECREF(co_consts);
-    Py_DECREF(co_code);
-
-    return code;
-#else
 // not important for functioning of most code, so not implemented for p3 for now (TODO)
     (void)pymeth;
     Py_RETURN_NONE;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -885,13 +821,9 @@ PyTypeObject CPPOverload_Type = {
     0,                             // tp_mro
     0,                             // tp_cache
     0,                             // tp_subclasses
-    0                              // tp_weaklist
-#if PY_VERSION_HEX >= 0x02030000
-    , 0                            // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-    , 0                            // tp_version_tag
-#endif
+    0,                             // tp_weaklist
+    0,                             // tp_del
+    0                              // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
     , 0                            // tp_finalize
 #endif

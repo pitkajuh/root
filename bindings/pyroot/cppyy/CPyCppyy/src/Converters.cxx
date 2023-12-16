@@ -41,15 +41,11 @@ namespace CPyCppyy {
 
 }
 
-#if PY_VERSION_HEX < 0x03000000
-const size_t MOVE_REFCOUNT_CUTOFF = 1;
-#else
 // p3 has at least 2 ref-counts, as contrary to p2, it will create a descriptor
 // copy for the method holding self in the case of __init__; but there can also
 // be a reference held by the frame object, which is indistinguishable from a
 // local variable reference, so the cut-off has to remain 2.
 const size_t MOVE_REFCOUNT_CUTOFF = 2;
-#endif
 
 //- pretend-ctypes helpers ---------------------------------------------------
 struct CPyCppyy_tagCDataObject {       // non-public (but stable)
@@ -632,14 +628,6 @@ bool CPyCppyy::LongRefConverter::SetArg(
     PyObject* pyobject, Parameter& para, CallContext* /* ctxt */)
 {
 // convert <pyobject> to C++ long&, set arg for call
-#if PY_VERSION_HEX < 0x03000000
-    if (RefInt_CheckExact(pyobject)) {
-        para.fValue.fVoidp = (void*)&((PyIntObject*)pyobject)->ob_ival;
-        para.fTypeCode = 'V';
-        return true;
-    }
-#endif
-
     if (Py_TYPE(pyobject) == GetCTypesType(ct_c_long)) {
         para.fValue.fVoidp = (void*)((CPyCppyy_tagCDataObject*)pyobject)->b_ptr;
         para.fTypeCode = 'V';
@@ -676,21 +664,11 @@ bool CPyCppyy::IntRefConverter::SetArg(
     PyObject* pyobject, Parameter& para, CallContext* /* ctxt */)
 {
 // convert <pyobject> to C++ (pseudo)int&, set arg for call
-#if PY_VERSION_HEX < 0x03000000
-    if (RefInt_CheckExact(pyobject)) {
-        para.fValue.fVoidp = (void*)&((PyIntObject*)pyobject)->ob_ival;
-        para.fTypeCode = 'V';
-        return true;
-    }
-#endif
-
-#if PY_VERSION_HEX >= 0x02050000
     if (Py_TYPE(pyobject) == GetCTypesType(ct_c_int)) {
         para.fValue.fVoidp = (void*)((CPyCppyy_tagCDataObject*)pyobject)->b_ptr;
         para.fTypeCode = 'V';
         return true;
     }
-#endif
 
 // alternate, pass pointer from buffer
     Py_ssize_t buflen = Utility::GetBuffer(pyobject, 'i', sizeof(int), para.fValue.fVoidp);
@@ -699,11 +677,7 @@ bool CPyCppyy::IntRefConverter::SetArg(
         return true;
     };
 
-#if PY_VERSION_HEX < 0x02050000
-    PyErr_SetString(PyExc_TypeError, "use cppyy.Long for pass-by-ref of ints");
-#else
     PyErr_SetString(PyExc_TypeError, "use ctypes.c_int for pass-by-ref of ints");
-#endif
     return false;
 }
 
@@ -1010,11 +984,8 @@ bool CPyCppyy::DoubleRefConverter::SetArg(
         return true;
     }
 
-#if PY_VERSION_HEX < 0x02050000
-    PyErr_SetString(PyExc_TypeError, "use cppyy.Double for pass-by-ref of doubles");
-#else
     PyErr_SetString(PyExc_TypeError, "use ctypes.c_double for pass-by-ref of doubles");
-#endif
+
     return false;
 }
 
@@ -2576,9 +2547,7 @@ bool CPyCppyy::InitializerListConverter::SetArg(
 // to be a syntactic thing, so only _python_ sequences are allowed; bound C++ proxies
 // are therefore rejected (should go through eg. a copy constructor etc.)
     if (CPPInstance_Check(pyobject) || !PySequence_Check(pyobject) || CPyCppyy_PyText_Check(pyobject)
-#if PY_VERSION_HEX >= 0x03000000
         || PyBytes_Check(pyobject)
-#endif
         )
         return false;
 

@@ -722,15 +722,15 @@ static PyObject* tpp_subscript(TemplateProxy* pytmpl, PyObject* args)
 
 //-----------------------------------------------------------------------------
 static PyObject* tpp_getuseffi(CPPOverload*, void*)
-{   
+{
     return PyInt_FromLong(0); // dummy (__useffi__ unused)
-}   
-    
+}
+
 //-----------------------------------------------------------------------------
 static int tpp_setuseffi(CPPOverload*, PyObject*, void*)
-{   
+{
     return 0;                 // dummy (__useffi__ unused)
-}   
+}
 
 
 //----------------------------------------------------------------------------
@@ -887,13 +887,9 @@ PyTypeObject TemplateProxy_Type = {
    0,                         // tp_mro
    0,                         // tp_cache
    0,                         // tp_subclasses
-   0                          // tp_weaklist
-#if PY_VERSION_HEX >= 0x02030000
-   , 0                        // tp_del
-#endif
-#if PY_VERSION_HEX >= 0x02060000
-   , 0                        // tp_version_tag
-#endif
+   0,                         // tp_weaklist
+   0,                         // tp_del
+   0                          // tp_version_tag
 #if PY_VERSION_HEX >= 0x03040000
    , 0                        // tp_finalize
 #endif
