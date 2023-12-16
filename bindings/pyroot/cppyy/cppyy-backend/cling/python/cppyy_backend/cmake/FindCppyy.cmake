@@ -155,10 +155,9 @@ endfunction(cppyy_generate_init)
 #     normal build environment of the header files.
 #
 #   - One to compile the generated, generic C++ binding code using a standard
-#     C++ compiler. The resulting library code is "universal" in that it is
-#     compatible with both Python2 and Python3.
+#     C++ compiler.
 #
-#   - One to package the library and ancilliary files into standard Python2/3
+#   - One to package the library and ancilliary files into standard Python3
 #     wheel format. The packaging is done using native Python tooling.
 #
 # Arguments and options:

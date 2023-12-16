@@ -1,4 +1,3 @@
-import py, os, sys
 from pytest import raises
 from .support import setup_make
 

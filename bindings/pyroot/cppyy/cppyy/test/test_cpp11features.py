@@ -1,4 +1,4 @@
-import py, os, sys
+import py
 from pytest import raises
 from .support import setup_make
 
@@ -128,7 +128,7 @@ class TestCPP11FEATURES:
 
     def test05_nullptr(self):
         """Allow the programmer to pass NULL in certain cases"""
-      
+
         import cppyy
 
       # test existence
@@ -136,7 +136,7 @@ class TestCPP11FEATURES:
       # assert not hasattr(cppyy.gbl, 'nullptr')
 
       # usage is tested in datatypes.py:test15_nullptr_passing
- 
+
     def test06_move(self):
         """Move construction, assignment, and methods"""
 
@@ -154,10 +154,7 @@ class TestCPP11FEATURES:
             i2 = T(i1)  # cctor
             assert T.s_move_counter == 0
 
-            if is_pypy or 0x3000000 <= sys.hexversion:
-                i3 = T(std.move(T()))            # can't check ref-count
-            else:
-                i3 = T(T()) # should call move, not memoized cctor
+            i3 = T(T()) # should call move, not memoized cctor
             assert T.s_move_counter == 1
 
             i3 = T(std.move(T()))                # both move and ref-count
@@ -170,10 +167,7 @@ class TestCPP11FEATURES:
             i4.__assign__(i2)
             assert T.s_move_counter == 3
 
-            if is_pypy or 0x3000000 <= sys.hexversion:
-                i4.__assign__(std.move(T()))     # can't check ref-count
-            else:
-                i4.__assign__(T())
+            i4.__assign__(T())
             assert T.s_move_counter == 4
 
             i4.__assign__(std.move(i2))

@@ -14,26 +14,17 @@ import re
 import setuptools
 import subprocess
 import sys
-try:
-    #
-    # Python2.
-    #
-    from imp import load_source
-except ImportError:
-    #
-    # Python3.
-    #
-    import importlib.util
+import importlib.util
 
-    def load_source(module_name, file_path, add_to_sys=False):
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        # Optional; only necessary if you want to be able to import the module
-        # by name later.
-        if add_to_sys:
-            sys.modules[module_name] = module
-        return module
+def load_source(module_name, file_path, add_to_sys=False):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    # Optional; only necessary if you want to be able to import the module
+    # by name later.
+    if add_to_sys:
+        sys.modules[module_name] = module
+    return module
 
 import cppyy
 
@@ -44,7 +35,7 @@ gettext.install(__name__)
 _ = _
 
 
-PRIMITIVE_TYPES = re.compile(r"\b(bool|char|short|int|unsigned|long|float|double)\b")
+PRIMITIVE_TYPES = re.compile(r"\b(bool|char|short|int|unsigned|float|double)\b")
 
 
 def add_pythonizations(py_files, noisy=False):
@@ -194,12 +185,7 @@ def initialise(pkg, lib_file, map_file, noisy=False):
     #
     # Load pythonizations
     #
-    try:
-        pythonization_files = glob.glob(os.path.join(pkg_dir, '**/pythonize*.py'), recursive=True)
-    except TypeError:
-        # versions older than 3.5 do not support 'recursive'
-        # TODO: below is good enough for most cases, but not recursive
-        pythonization_files = glob.glob(os.path.join(pkg_dir, 'pythonize*.py'))
+    pythonization_files = glob.glob(os.path.join(pkg_dir, '**/pythonize*.py'), recursive=True)
     add_pythonizations(pythonization_files, noisy=noisy)
 
     #

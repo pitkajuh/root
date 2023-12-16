@@ -23,33 +23,6 @@ _backend._cpp_backend = c
 import ctypes
 _w = ctypes.CDLL(_backend.__file__, ctypes.RTLD_GLOBAL)
 
-
-# some beautification for inspect (only on p2)
-import sys
-if sys.hexversion < 0x3000000:
-  # TODO: this reliese on CPPOverload cooking up a func_code object, which atm
-  # is simply not implemented for p3 :/
-
-  # convince inspect that PyROOT method proxies are possible drop-ins for python
-  # methods and classes for pydoc
-    import inspect
-
-    inspect._old_isfunction = inspect.isfunction
-    def isfunction(object):
-        if type(object) == _backend.CPPOverload and not object.im_class:
-            return True
-        return inspect._old_isfunction( object )
-    inspect.isfunction = isfunction
-
-    inspect._old_ismethod = inspect.ismethod
-    def ismethod(object):
-        if type(object) == _backend.CPPOverload:
-            return True
-        return inspect._old_ismethod(object)
-    inspect.ismethod = ismethod
-    del isfunction, ismethod
-
-
 ### template support ---------------------------------------------------------
 class Template(object):  # expected/used by ProxyWrappers.cxx in CPyCppyy
     def __init__(self, name):

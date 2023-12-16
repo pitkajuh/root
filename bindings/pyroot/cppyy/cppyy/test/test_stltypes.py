@@ -1,5 +1,4 @@
-# -*- coding: UTF-8 -*-
-import py, os, sys
+import py
 from pytest import raises
 from .support import setup_make, pylong, pyunicode, maxvalue
 
@@ -42,7 +41,6 @@ class IterFunc:
         v = self.seqn[self.i]
         self.i += 1
         return v
-    next = __next__ # p2.7
 
 class IterGen:
     """Sequence using iterator protocol defined with a generator"""
@@ -63,7 +61,6 @@ class IterNextOnly:
         v = self.seqn[self.i]
         self.i += 1
         return v
-    next = __next__ # p2.7
 
 class IterNoNext:
     """Iterator missing __next__()"""
@@ -82,7 +79,6 @@ class IterGenExc:
         return self
     def __next__(self):
         3 // 0
-    next = __next__ # p2.7
 
 class IterFuncStop:
     """Test immediate stop"""
@@ -92,7 +88,6 @@ class IterFuncStop:
         return self
     def __next__(self):
         raise StopIteration
-    next = __next__ # p2.7
 
 from itertools import chain
 def itermulti(seqn):
@@ -228,7 +223,7 @@ class TestSTLVECTOR:
             assert tv1 is tv2
             assert tv1.iterator is cppyy.gbl.std.vector(p_type).iterator
 
-            #----- 
+            #-----
             v = tv1()
             assert not v
             v += range(self.N)

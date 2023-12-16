@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import os, sys, subprocess
 import shutil, tarfile
-try:
-    import urllib2
-except ModuleNotFoundError:
-    import urllib.request as urllib2  # p3
+import urllib.request as urllib2  # p3
 
 if 'win32' in sys.platform:
     def rename(f1, f2):
@@ -121,7 +117,7 @@ def clean_directory(directory, keeplist, trim_cmake=True):
         rename(outp, inp)
     else:
         print('reusing existing %s/CMakeLists.txt' % (directory,))
- 
+
 
 if not os.path.exists(TARBALL_CACHE_DIR):
     os.mkdir(TARBALL_CACHE_DIR)

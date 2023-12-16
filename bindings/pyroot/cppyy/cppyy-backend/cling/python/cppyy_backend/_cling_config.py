@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os, sys, subprocess
 
 MYHOME = os.path.dirname(__file__)

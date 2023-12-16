@@ -14,25 +14,17 @@ import re
 import setuptools
 import subprocess
 import sys
-try:
-    #
-    # Python2.
-    #
-    from imp import load_source
-except ImportError:
-    #
-    # Python3.
-    #
-    import importlib.util
 
-    def load_source(module_name, file_path):
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        # Optional; only necessary if you want to be able to import the module
-        # by name later.
-        sys.modules[module_name] = module
-        return module
+import importlib.util
+
+def load_source(module_name, file_path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    # Optional; only necessary if you want to be able to import the module
+    # by name later.
+    sys.modules[module_name] = module
+    return module
 
 import cppyy
 
@@ -313,7 +305,7 @@ def find_pips():
 
     :return: [pip_program]
     """
-    possible_pips = ['pip', 'pip2', 'pip3']
+    possible_pips = ['pip', 'pip3']
     pips = {}
     for pip in possible_pips:
         try:

@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Cppyy binding description generator."""
-from __future__ import print_function
 import argparse
 import collections
 import gettext
