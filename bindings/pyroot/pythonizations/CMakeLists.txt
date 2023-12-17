@@ -9,7 +9,7 @@
 ################################################################
 
 if(dataframe)
-    list(APPEND PYROOT_EXTRA_PYTHON_SOURCES
+    list(APPEND PYROOT_PY3_SOURCE
         ROOT/_pythonization/_rdf_utils.py
         ROOT/_pythonization/_rdataframe.py
         ROOT/_pythonization/_rdfdescription.py
@@ -23,7 +23,7 @@ if(dataframe)
 endif()
 
 if(roofit)
-    list(APPEND PYROOT_EXTRA_PYTHON_SOURCES
+    list(APPEND PYROOT_PY3_SOURCE
         ROOT/_pythonization/_roofit/__init__.py
         ROOT/_pythonization/_roofit/_rooabscollection.py
         ROOT/_pythonization/_roofit/_rooabsdata.py
@@ -53,7 +53,7 @@ if(roofit)
 endif()
 
 if(tmva)
-    list(APPEND PYROOT_EXTRA_PYTHON_SOURCES
+    list(APPEND PYROOT_PY3_SOURCE
         ROOT/_pythonization/_tmva/_crossvalidation.py
         ROOT/_pythonization/_tmva/_dataloader.py
         ROOT/_pythonization/_tmva/_factory.py
@@ -72,7 +72,7 @@ endif()
 list(APPEND PYROOT_EXTRA_HEADERS
      inc/TPyDispatcher.h)
 
-set(py_sources
+set(py3_sources
   ROOT/_application.py
   ROOT/_asan.py
   ROOT/_facade.py
@@ -105,7 +105,8 @@ set(py_sources
   ROOT/_pythonization/_ttree.py
   ROOT/_pythonization/_tvector3.py
   ROOT/_pythonization/_tvectort.py
-  ${PYROOT_EXTRA_PYTHON_SOURCES}
+  ${PYROOT_PY3_SOURCE}
+  ${PYROOT_EXTRA_PY3_SOURCE}
 )
 
 set(cpp_sources
@@ -130,7 +131,7 @@ set(ROOTPySrcDir python/ROOT)
 set(ROOT_headers_dir inc)
 
 # Add custom rules to copy the Python sources into the build directory
-foreach(py_source ${py_sources})
+foreach(py_source ${py3_sources})
   add_custom_command(
       OUTPUT ${localruntimedir}/${py_source}
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/python/${py_source}

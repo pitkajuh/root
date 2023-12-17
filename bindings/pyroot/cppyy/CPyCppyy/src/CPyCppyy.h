@@ -79,7 +79,6 @@ typedef dim_t* dims_t;
 #endif
 
 // for 3.0 support (backwards compatibility, really)
-#if PY_VERSION_HEX >= 0x03000000
 #define CPyCppyy_PyText_Check              PyUnicode_Check
 #define CPyCppyy_PyText_CheckExact         PyUnicode_CheckExact
 #define CPyCppyy_PyText_AsString           PyUnicode_AsUTF8
@@ -143,7 +142,6 @@ static inline const char* CPyCppyy_PyText_AsStringAndSize(PyObject* pystr, Py_ss
 #define PyClass_Check   PyType_Check
 
 #define PyBuffer_Type   PyMemoryView_Type
-#endif  // ! 3.0
 
 #if PY_VERSION_HEX >= 0x03020000
 #define CPyCppyy_PySliceCast   PyObject*

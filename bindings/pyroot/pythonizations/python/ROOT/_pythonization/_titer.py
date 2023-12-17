@@ -30,7 +30,6 @@ def pythonize_titer():
 
     # Make TIter a Python iterator
     klass.__next__ = _next_pyz  # Py3
-    klass.next     = _next_pyz  # Py2
 
 # Instant pythonization (executed at `import ROOT` time), no need of a
 # decorator. This is a core class that is instantiated before cppyy's

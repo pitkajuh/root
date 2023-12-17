@@ -774,7 +774,6 @@ static PyMethodDef gCPyCppyyMethods[] = {
 #define CONCAT(a, b, c, d) a##b##c##d
 #define LIBCPPYY_INIT_FUNCTION(a, b, c, d) CONCAT(a, b, c, d)
 
-#if PY_VERSION_HEX >= 0x03000000
 struct module_state {
     PyObject *error;
 };
@@ -809,10 +808,6 @@ static struct PyModuleDef moduledef = {
 //----------------------------------------------------------------------------
 #define CPYCPPYY_INIT_ERROR return nullptr
 LIBCPPYY_INIT_FUNCTION(extern "C" PyObject* PyInit_libcppyy, PY_MAJOR_VERSION, _, PY_MINOR_VERSION) ()
-#else
-#define CPYCPPYY_INIT_ERROR return
-LIBCPPYY_INIT_FUNCTION(extern "C" void initlibcppyy, PY_MAJOR_VERSION, _, PY_MINOR_VERSION) ()
-#endif
 {
 // Initialization of extension module libcppyy.
 
@@ -839,11 +834,8 @@ LIBCPPYY_INIT_FUNCTION(extern "C" void initlibcppyy, PY_MAJOR_VERSION, _, PY_MIN
     Py_DECREF(dict);
 
 // setup this module
-#if PY_VERSION_HEX >= 0x03000000
     gThisModule = PyModule_Create(&moduledef);
-#else
-    gThisModule = Py_InitModule(const_cast<char*>(LIBCPPYY_NAME), gCPyCppyyMethods);
-#endif
+
     if (!gThisModule)
         CPYCPPYY_INIT_ERROR;
 
@@ -940,8 +932,6 @@ LIBCPPYY_INIT_FUNCTION(extern "C" void initlibcppyy, PY_MAJOR_VERSION, _, PY_MIN
 // create the memory regulator
     static MemoryRegulator s_memory_regulator;
 
-#if PY_VERSION_HEX >= 0x03000000
     Py_INCREF(gThisModule);
     return gThisModule;
-#endif
 }
