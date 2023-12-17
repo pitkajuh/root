@@ -313,7 +313,6 @@ static PyMethodDef gJupyROOTMethods[] = {
 #define CONCAT(a, b, c, d) a##b##c##d
 #define LIBJUPYROOT_INIT_FUNCTION(a, b, c, d) CONCAT(a, b, c, d)
 
-#if PY_VERSION_HEX >= 0x03000000
 struct module_state {
    PyObject *error;
 };
@@ -340,22 +339,13 @@ static struct PyModuleDef moduledef = {PyModuleDef_HEAD_INIT,       LIBJUPYROOT_
 
 #define JUPYROOT_INIT_ERROR return NULL
 LIBJUPYROOT_INIT_FUNCTION(extern "C" PyObject *PyInit_libJupyROOT, PY_MAJOR_VERSION, _, PY_MINOR_VERSION) ()
-#else // PY_VERSION_HEX >= 0x03000000
-#define JUPYROOT_INIT_ERROR return
-LIBJUPYROOT_INIT_FUNCTION(extern "C" void initlibJupyROOT, PY_MAJOR_VERSION, _, PY_MINOR_VERSION) ()
-#endif
 {
 // setup PyROOT
-#if PY_VERSION_HEX >= 0x03000000
    gJupyRootModule = PyModule_Create(&moduledef);
-#else
-   gJupyRootModule = Py_InitModule(const_cast<char *>(LIBJUPYROOT_NAME), gJupyROOTMethods);
-#endif
+
    if (!gJupyRootModule)
       JUPYROOT_INIT_ERROR;
 
-#if PY_VERSION_HEX >= 0x03000000
    Py_INCREF(gJupyRootModule);
    return gJupyRootModule;
-#endif
 }
