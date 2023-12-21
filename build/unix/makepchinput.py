@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 #
 # Extract the input needed to build a PCH for the main (enabled) ROOT modules.
 # Script takes as argument the source directory path, the set of enabled
@@ -8,7 +8,6 @@
 # Author: Axel Naumann <axel@cern.ch>, 2014-10-16
 # Translated to Python by Danilo Piparo, 2015-04-22
 
-from __future__ import print_function
 import sys
 import os
 import glob

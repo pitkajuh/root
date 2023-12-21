@@ -1,9 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ### generate COnv2d model using Pytorch
 
-from __future__ import print_function
-import numpy as np
 import argparse
 import torch
 import torch.nn as nn
@@ -13,7 +11,7 @@ import torch.nn.functional as F
 result = []
 
 class Net(nn.Module):
-    
+
     def __init__(self, nd = 1, nc = 1, nl = 4, use_bn = False):
         super(Net, self).__init__()
 
@@ -22,7 +20,7 @@ class Net(nn.Module):
         self.use_bn = use_bn
 
         nout = 50
-        if (nl == 1) : nout = nc 
+        if (nl == 1) : nout = nc
         self.out0 = nn.Linear(in_features=nd, out_features=50)
         if (self.use_bn): self.bn1 = nn.BatchNorm1d(50)
         self.out1 = nn.Linear(in_features=50, out_features=100)
@@ -55,10 +53,10 @@ def main():
    parser.add_argument('--v', action='store_true', default=False,
                         help='For verbose mode')
 
-   
+
    args = parser.parse_args()
-  
-  
+
+
    bsize = 1
    d = 10
    nlayers = 4
@@ -67,9 +65,9 @@ def main():
    np = len(args.params)
    if (np < 2) : exit()
    bsize = args.params[0]
-   d = args.params[1] 
+   d = args.params[1]
    if (np > 2) : nlayers = args.params[2]
-  
+
 
    print ("using batch-size =",bsize,"input dim =",d,"nlayers =",nlayers)
 
@@ -89,7 +87,7 @@ def main():
 
    xinput_test = xinput
    #in case of batch normalization generate different data for training
-   if (use_bn): 
+   if (use_bn):
        for id in range(0,d):
            xa = torch.randn([bsize,1]) * (id+1) + id * torch.ones([bsize,1])
            #concatenate tensors
@@ -133,16 +131,16 @@ def main():
         checkpoint = torch.load(name + ".pt")
         model.load_state_dict(checkpoint['model_state_dict'])
 
-   #set model in evaluation format 
-   model.eval() 
+   #set model in evaluation format
+   model.eval()
    y = model.forward(xinput_test)
-   
+
    print("output data : shape, ",y.shape)
    print(y)
 
    outSize = y.nelement()
    yvec = y.reshape([outSize])
-   
+
 
    f = open(name + ".out", "w")
    for i in range(0,outSize):

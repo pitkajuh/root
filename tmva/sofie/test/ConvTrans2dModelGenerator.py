@@ -1,9 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ### generate COnv2d model using Pytorch
 
-from __future__ import print_function
-import numpy as np
 import argparse
 import torch
 import torch.nn as nn

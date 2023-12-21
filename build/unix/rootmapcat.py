@@ -1,9 +1,8 @@
-#! /usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 An utility to smartly "cat" rootmap files.
 '''
-from __future__ import print_function
 import argparse
 import sys
 
@@ -50,7 +49,7 @@ class Rootmap(object):
                 else:
                     self.sections[secName] = []
         self.fwdDecls.extend(fwdDeclsSet)
-        
+
     def Print(self,outrootmapname):
         # Now we reduce the fwd declarations
         self.fwdDecls = sorted(list(set(self.fwdDecls)))
