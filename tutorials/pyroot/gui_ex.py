@@ -5,9 +5,8 @@
 ## \macro_code
 ##
 ## \author Wim Lavrijsen
-from __future__ import print_function
 
-import os, sys, ROOT
+import ROOT
 
 def pygaus( x, par ):
    import math

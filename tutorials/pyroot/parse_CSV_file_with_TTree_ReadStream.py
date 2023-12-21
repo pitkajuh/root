@@ -35,7 +35,6 @@
 ## \macro_code
 ##
 ## \author Michael Marino
-from __future__ import print_function
 
 import ROOT
 import sys
@@ -125,4 +124,3 @@ if __name__ == '__main__':
         print("Usage: %s file_to_parse.dat" % sys.argv[0])
         sys.exit(1)
     parse_CSV_file_with_TTree_ReadStream("example_tree", sys.argv[1])
-

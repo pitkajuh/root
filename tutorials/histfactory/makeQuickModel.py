@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # A pyROOT script that allows one to
 # make quick measuremenst.
@@ -8,11 +8,10 @@
 # as well as potentially uncertainties on those
 # values, and returns a fitted signal value
 # and errors
-from __future__ import print_function
 
 
 def main():
-    """ Create a simple model and run statistical tests  
+    """ Create a simple model and run statistical tests
 
     This script can be used to make simple statistical using histfactory.
     It takes values for signal, background, and data as input, and
@@ -21,11 +20,11 @@ def main():
     the model can be fit if requested.
 
     """
-    
+
     # Let's parse the input
     # Define the command line options of the script:
     import optparse
-    desc = " ".join(main.__doc__.split())    
+    desc = " ".join(main.__doc__.split())
 
     vers = "0.1"
     parser = optparse.OptionParser( description = desc, version = vers, usage = "%prog [options]" )
@@ -45,7 +44,7 @@ def main():
     parser.add_option( "--signal-uncertainty", dest = "signal_uncertainty",
                        action = "store", type = "float", default=None,
                        help = "Uncertainty on the signal rate, as a fraction. --signal-uncertainty=.05 means a 5% uncertainty." )
- 
+
     parser.add_option( "--background-uncertainty", dest = "background_uncertainty",
                        action = "store", type = "float", default=None,
                        help = "Uncertainty on the background rate, as a fraction, not a percentage. --background-uncertainty=.05 means a 5% uncertainty." )
@@ -60,7 +59,7 @@ def main():
 
     # Parse the command line options:
     ( options, unknown ) = parser.parse_args()
-    
+
     # Make a log
     # Set the format of the log messages:
     FORMAT = 'Py:%(name)-25s  %(levelname)-8s  %(message)s'
@@ -70,7 +69,7 @@ def main():
     logger = logging.getLogger( "makeQuickMeasurement" )
     # Set the following to DEBUG when debugging the scripts:
     logger.setLevel( logging.INFO )
-    
+
     # So a small sanity check:
     if len( unknown ):
         logger.warning( "Options(s) not recognised: [" + ",".join( unknown ) + "]" )
@@ -88,7 +87,7 @@ def main():
         logger.error( "You have to define a value for measured data (use --data)" )
         return 255
 
-    
+
     # Okay, if all input is acceptable, we simply pass
     # it to the MakeSimpleMeasurement function, which
     # does the real work.
@@ -99,11 +98,11 @@ def main():
     return
 
 
-def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertainty=None, background_uncertainty=None, 
+def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertainty=None, background_uncertainty=None,
                            Export=False, output_prefix="Measurement"):
     """ Make a simple measurement using HistFactory
-    
-    Take in simple values for signal, background data, 
+
+    Take in simple values for signal, background data,
     and potentially uncertainty on signal and background
 
     """
@@ -121,8 +120,8 @@ def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertai
     meas.SetOutputFilePrefix( output_prefix )
     meas.SetPOI( "SigXsecOverSM" )
 
-    # We don't include Lumi here, 
-    # but since HistFactory gives it to 
+    # We don't include Lumi here,
+    # but since HistFactory gives it to
     # us for free, we set it constant
     # The values are just dummies
 
@@ -136,7 +135,7 @@ def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertai
     meas.SetExportOnly( False )
 
     # Create a channel and set
-    # the measured value of data 
+    # the measured value of data
     # (no external hist necessary for cut-and-count)
     chan = ROOT.RooStats.HistFactory.Channel( "channel" )
     chan.SetData( data_val )
@@ -151,7 +150,7 @@ def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertai
     # Try to make intelligent choice of upper bound
     import math
     upper_bound = 3*math.ceil( (data_val - background_val) / signal_val )
-    upper_bound = max(upper_bound, 3) 
+    upper_bound = max(upper_bound, 3)
     signal.AddNormFactor( "SigXsecOverSM", 1, 0, upper_bound )
 
     # If we have a signal uncertainty, add it too
@@ -182,7 +181,7 @@ def MakeSimpleMeasurement( signal_val, background_val, data_val, signal_uncertai
     meas.AddChannel( chan )
 
     # Now, do the measurement
-    if Export: 
+    if Export:
         workspace = ROOT.RooStats.HistFactory.MakeModelAndMeasurementFast( meas )
         return workspace
 
