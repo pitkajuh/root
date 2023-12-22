@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # Build a pch for the headers and linkdefs in root-build-dir/etc/dictpch/.
 # root-build-dir is first tried as ./ - if that doesn't exist, $ROOTSYS
@@ -15,7 +15,6 @@
 # Translated to python by Danilo Piparo, 2015-4-23
 
 
-from __future__ import print_function
 import sys
 import os
 import subprocess
