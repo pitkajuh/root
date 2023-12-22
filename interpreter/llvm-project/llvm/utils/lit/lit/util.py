@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import errno
 import itertools
 import math
@@ -13,11 +11,7 @@ import threading
 
 
 def is_string(value):
-    try:
-        # Python 2 and Python 3 are different here.
-        return isinstance(value, basestring)
-    except NameError:
-        return isinstance(value, str)
+    return isinstance(value, str)
 
 
 def pythonize_bool(value):

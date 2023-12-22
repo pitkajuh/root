@@ -1,7 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from __future__ import print_function
-import re, string, sys, os, time, math
+import re, string, sys, math
 
 DEBUG = 0
 
@@ -10,7 +9,7 @@ DEBUG = 0
 def parse(file):
   f = open(file, 'r')
   d = f.read()
-  
+
   # Cleanup weird stuff
   d = re.sub(r',\d+:\d', '', d)
 
@@ -24,7 +23,7 @@ def parse(file):
 
     if t[0] == 'PASS' or t[0] == 'FAIL' :
       tmp = t[2].split('llvm-test/')
-      
+
       if DEBUG:
         print(tmp)
 
@@ -44,7 +43,7 @@ def parse(file):
 
         if DEBUG:
           print("n == ", n);
-        
+
         if n == 'compile-success':
           test[fname]['compile time'] = float(t[2].split('program')[1].strip('\r\n'))
 
