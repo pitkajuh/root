@@ -4,15 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 """ This module parses and validates arguments for command-line interfaces.
 
-It uses argparse module to create the command line parser. (This library is
-in the standard python library since 3.2 and backported to 2.7, but not
-earlier.)
+It uses argparse module to create the command line parser.
 
 It also implements basic validation methods, related to the command.
 Validations are mostly calling specific help methods, or mangling values.
 """
-from __future__ import absolute_import, division, print_function
-
 import os
 import sys
 import argparse

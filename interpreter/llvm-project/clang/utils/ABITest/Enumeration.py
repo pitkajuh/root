@@ -1,6 +1,5 @@
 """Utilities for enumeration of finite and countably infinite sets.
 """
-from __future__ import absolute_import, division, print_function
 ###
 # Countable iteration
 
@@ -13,7 +12,7 @@ class Aleph0(int):
         return type._singleton
     def __repr__(self): return '<aleph0>'
     def __str__(self): return 'inf'
-    
+
     def __cmp__(self, b):
         return 1
 
@@ -21,12 +20,12 @@ class Aleph0(int):
         raise ValueError("Cannot subtract aleph0")
     __rsub__ = __sub__
 
-    def __add__(self, b): 
+    def __add__(self, b):
         return self
     __radd__ = __add__
 
-    def __mul__(self, b): 
-        if b == 0: return b            
+    def __mul__(self, b):
+        if b == 0: return b
         return self
     __rmul__ = __mul__
 
@@ -63,7 +62,7 @@ def getNthPairInfo(N):
     while base(next)<=N:
         line = next
         next = line << 1
-    
+
     # Binary search for starting line
     lo = line
     hi = line<<1
@@ -84,7 +83,7 @@ def getNthPair(N):
 
 def getNthPairBounded(N,W=aleph0,H=aleph0,useDivmod=False):
     """getNthPairBounded(N, W, H) -> (x, y)
-    
+
     Return the N-th pair such that 0 <= x < W and 0 <= y < H."""
 
     if W <= 0 or H <= 0:
@@ -107,7 +106,7 @@ def getNthPairBounded(N,W=aleph0,H=aleph0,useDivmod=False):
         # Conceptually we want to slide a diagonal line across a
         # rectangle. This gives more interesting results for large
         # bounds than using divmod.
-        
+
         # If in lower left, just return as usual
         cornerSize = base(W)
         if N < cornerSize:
@@ -151,7 +150,7 @@ def getNthNTuple(N, W, H=aleph0, useLeftToRight=False):
         else:
             LW,RW = W//2, W - (W//2)
             L,R = getNthPairBounded(N, H**LW, H**RW)
-            return (getNthNTuple(L,LW,H=H,useLeftToRight=useLeftToRight) + 
+            return (getNthNTuple(L,LW,H=H,useLeftToRight=useLeftToRight) +
                     getNthNTuple(R,RW,H=H,useLeftToRight=useLeftToRight))
 def getNthNTupleChecked(N, W, H=aleph0, useLeftToRight=False, GNT=getNthNTuple):
     t = GNT(N,W,H,useLeftToRight)
@@ -178,7 +177,7 @@ def getNthTuple(N, maxSize=aleph0, maxElement=aleph0, useDivmod=False, useLeftTo
     else:
         S,M = getNthPairBounded(N, maxSize, useDivmod=useDivmod)
     return getNthNTuple(M, S+1, maxElement, useLeftToRight=useLeftToRight)
-def getNthTupleChecked(N, maxSize=aleph0, maxElement=aleph0, 
+def getNthTupleChecked(N, maxSize=aleph0, maxElement=aleph0,
                        useDivmod=False, useLeftToRight=False, GNT=getNthTuple):
     # FIXME: maxsize is inclusive
     t = GNT(N,maxSize,maxElement,useDivmod,useLeftToRight)
@@ -275,4 +274,3 @@ if __name__ == '__main__':
     testPairs()
 
     testPairsVB()
-

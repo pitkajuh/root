@@ -7,7 +7,6 @@ Output files:
   *.test.sh -- interestingness test for C-Reduce
 """
 
-from __future__ import print_function
 from argparse import ArgumentParser, RawTextHelpFormatter
 import os
 import re

@@ -1,12 +1,10 @@
-#===- perf-helper.py - Clang Python Bindings -----------------*- python -*--===#
+#===- perf-helper.py - Clang Python Bindings -----------------*- python3 -*--===#
 #
 # Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 #
 #===------------------------------------------------------------------------===#
-
-from __future__ import absolute_import, division, print_function
 
 import sys
 import os
@@ -21,7 +19,7 @@ test_env = { 'PATH'    : os.environ['PATH'] }
 
 def findFilesWithExtension(path, extension):
   filenames = []
-  for root, dirs, files in os.walk(path): 
+  for root, dirs, files in os.walk(path):
     for filename in files:
       if filename.endswith(f".{extension}"):
         filenames.append(os.path.join(root, filename))
@@ -102,7 +100,7 @@ def dtrace(args):
   dtrace_args.extend((
       'dtrace', '-xevaltime=exec',
       '-xbufsize=%dm' % (opts.buffer_size),
-      '-q', '-n', dtrace_script, 
+      '-q', '-n', dtrace_script,
       '-c', ' '.join(cmd)))
 
   if sys.platform == "darwin":
@@ -244,7 +242,7 @@ def parse_dtrace_symbol_file(path, all_symbols, all_symbols_set,
         # If we found too many possible symbols, ignore this as a prefix.
         if len(possible_symbols) > 100:
           print( "warning: ignoring symbol %r " % symbol +
-            "(no match and too many possible suffixes)", file=sys.stderr) 
+            "(no match and too many possible suffixes)", file=sys.stderr)
           continue
 
         # Report that we resolved a missing symbol.
@@ -284,7 +282,7 @@ def form_by_call_order_fair(symbol_lists):
       succs[a] = items = succs.get(a, [])
       if b not in items:
         items.append(b)
-  
+
   # Emit all the symbols, but make sure to always emit all successors from any
   # call list whenever we see a symbol.
   #
@@ -295,11 +293,11 @@ def form_by_call_order_fair(symbol_lists):
     for symbols in symbol_lists
     for node in symbols
     for s in ([node] + succs.get(node,[])))
- 
+
 def form_by_frequency(symbol_lists):
   # Form the order file by just putting the most commonly occurring symbols
   # first. This assumes the data files didn't use the oneshot dtrace method.
- 
+
   counts = {}
   for symbols in symbol_lists:
     for a in symbols:
@@ -308,14 +306,14 @@ def form_by_frequency(symbol_lists):
   by_count = list(counts.items())
   by_count.sort(key = lambda __n: -__n[1])
   return [s for s,n in by_count]
- 
+
 def form_by_random(symbol_lists):
   # Randomize the symbols.
   merged_symbols = uniq(s for symbols in symbol_lists
                           for s in symbols)
   random.shuffle(merged_symbols)
   return merged_symbols
- 
+
 def form_by_alphabetical(symbol_lists):
   # Alphabetize the symbols.
   merged_symbols = list(set(s for symbols in symbol_lists for s in symbols))

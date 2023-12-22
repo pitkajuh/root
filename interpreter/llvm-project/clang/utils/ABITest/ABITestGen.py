@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from __future__ import absolute_import, division, print_function
 from pprint import pprint
 import random, atexit, time
 from random import randrange
@@ -12,7 +11,7 @@ from TypeGen import *
 ####
 
 class TypePrinter(object):
-    def __init__(self, output, outputHeader=None, 
+    def __init__(self, output, outputHeader=None,
                  outputTests=None, outputDriver=None,
                  headerName=None, info=None):
         self.output = output
@@ -42,14 +41,14 @@ class TypePrinter(object):
             for f in (self.output,self.outputTests,self.outputDriver):
                 if f is not None:
                     print('#include "%s"\n'%(headerName,), file=f)
-        
+
         if self.outputDriver:
             print('#include <stdio.h>', file=self.outputDriver)
             print('#include <stdlib.h>\n', file=self.outputDriver)
             print('int main(int argc, char **argv) {', file=self.outputDriver)
             print('  int index = -1;', file=self.outputDriver)
             print('  if (argc > 1) index = atoi(argv[1]);', file=self.outputDriver)
-            
+
     def finish(self):
         if self.layoutTests:
             print('int main(int argc, char **argv) {', file=self.output)
@@ -59,12 +58,12 @@ class TypePrinter(object):
                 print('  if (index == -1 || index == %d)' % i, file=self.output)
                 print('    %s();' % f, file=self.output)
             print('  return 0;', file=self.output)
-            print('}', file=self.output) 
+            print('}', file=self.output)
 
         if self.outputDriver:
             print('  printf("DONE\\n");', file=self.outputDriver)
             print('  return 0;', file=self.outputDriver)
-            print('}', file=self.outputDriver)        
+            print('}', file=self.outputDriver)
 
     def addDeclaration(self, decl):
         if decl in self.declarations:
@@ -81,26 +80,26 @@ class TypePrinter(object):
 
     def getTypeName(self, T):
         name = self.types.get(T)
-        if name is None:            
+        if name is None:
             # Reserve slot
             self.types[T] = None
             self.types[T] = name = T.getTypeName(self)
         return name
-    
+
     def writeLayoutTest(self, i, ty):
         tyName = self.getTypeName(ty)
         tyNameClean = tyName.replace(' ','_').replace('*','star')
         fnName = 'test_%s' % tyNameClean
-            
+
         print('void %s(void) {' % fnName, file=self.output)
         self.printSizeOfType('    %s'%fnName, tyName, ty, self.output)
         self.printAlignOfType('    %s'%fnName, tyName, ty, self.output)
         self.printOffsetsOfType('    %s'%fnName, tyName, ty, self.output)
         print('}', file=self.output)
         print(file=self.output)
-        
+
         self.layoutTests.append((i,fnName))
-        
+
     def writeFunction(self, i, FT):
         args = ', '.join(['%s arg%d'%(self.getTypeName(t),i) for i,t in enumerate(FT.argTypes)])
         if not args:
@@ -119,11 +118,11 @@ class TypePrinter(object):
             print('%s %s(%s);'%(retvalTypeName, fnName, args), file=self.outputHeader)
         elif self.outputTests:
             print('%s %s(%s);'%(retvalTypeName, fnName, args), file=self.outputTests)
-            
+
         print('%s %s(%s)'%(retvalTypeName, fnName, args), end=' ', file=self.output)
         if self.writeBody:
             print('{', file=self.output)
-            
+
             for i,t in enumerate(FT.argTypes):
                 self.printValueOfType('    %s'%fnName, 'arg%d'%i, t)
 
@@ -139,7 +138,7 @@ class TypePrinter(object):
             print('    extern void test_%s(void);' % fnName, file=self.outputDriver)
             print('    test_%s();' % fnName, file=self.outputDriver)
             print('   }', file=self.outputDriver)
-            
+
         if self.outputTests:
             if self.outputHeader:
                 print('void test_%s(void);'%(fnName,), file=self.outputHeader)
@@ -161,7 +160,7 @@ class TypePrinter(object):
                 self.printValueOfType('  %s_RV'%fnName, 'RV', FT.returnType, output=self.outputTests, indent=4)
                 self.checkTypeValues('RV', '%s[i]' % retvalTests[0], FT.returnType, output=self.outputTests, indent=4)
                 print('  }', file=self.outputTests)
-            
+
             if tests:
                 print('  printf("%s: testing arguments.\\n");'%(fnName,), file=self.outputTests)
             for i,(array,length) in enumerate(tests):
@@ -172,20 +171,20 @@ class TypePrinter(object):
             print('}', file=self.outputTests)
 
     def getTestReturnValue(self, type):
-        typeName = self.getTypeName(type)        
+        typeName = self.getTypeName(type)
         info = self.testReturnValues.get(typeName)
         if info is None:
             name = '%s_retval'%(typeName.replace(' ','_').replace('*','star'),)
             print('%s %s;'%(typeName,name), file=self.output)
             if self.outputHeader:
                 print('extern %s %s;'%(typeName,name), file=self.outputHeader)
-            elif self.outputTests:                
+            elif self.outputTests:
                 print('extern %s %s;'%(typeName,name), file=self.outputTests)
             info = self.testReturnValues[typeName] = name
         return info
 
     def getTestValuesArray(self, type):
-        typeName = self.getTypeName(type)        
+        typeName = self.getTypeName(type)
         info = self.testValues.get(typeName)
         if info is None:
             name = '%s_values'%(typeName.replace(' ','_').replace('*','star'),)
@@ -217,7 +216,7 @@ class TypePrinter(object):
             for i in range(0, len(t.enumerators)):
                 yield 'enum%dval%d_%d' % (t.index, i, t.unique_id)
         elif isinstance(t, RecordType):
-            nonPadding = [f for f in t.fields 
+            nonPadding = [f for f in t.fields
                           if not f.isPaddingBitField()]
 
             if not nonPadding:
@@ -254,17 +253,17 @@ class TypePrinter(object):
             raise NotImplementedError('Cannot make tests values of type: "%s"'%(t,))
 
     def printSizeOfType(self, prefix, name, t, output=None, indent=2):
-        print('%*sprintf("%s: sizeof(%s) = %%ld\\n", (long)sizeof(%s));'%(indent, '', prefix, name, name), file=output) 
+        print('%*sprintf("%s: sizeof(%s) = %%ld\\n", (long)sizeof(%s));'%(indent, '', prefix, name, name), file=output)
     def printAlignOfType(self, prefix, name, t, output=None, indent=2):
-        print('%*sprintf("%s: __alignof__(%s) = %%ld\\n", (long)__alignof__(%s));'%(indent, '', prefix, name, name), file=output) 
+        print('%*sprintf("%s: __alignof__(%s) = %%ld\\n", (long)__alignof__(%s));'%(indent, '', prefix, name, name), file=output)
     def printOffsetsOfType(self, prefix, name, t, output=None, indent=2):
         if isinstance(t, RecordType):
             for i,f in enumerate(t.fields):
                 if f.isBitField():
                     continue
                 fname = 'field%d' % i
-                print('%*sprintf("%s: __builtin_offsetof(%s, %s) = %%ld\\n", (long)__builtin_offsetof(%s, %s));'%(indent, '', prefix, name, fname, name, fname), file=output) 
-                
+                print('%*sprintf("%s: __builtin_offsetof(%s, %s) = %%ld\\n", (long)__builtin_offsetof(%s, %s));'%(indent, '', prefix, name, fname, name, fname), file=output)
+
     def printValueOfType(self, prefix, name, t, output=None, indent=2):
         if output is None:
             output = self.output
@@ -293,7 +292,7 @@ class TypePrinter(object):
             print('%*sprintf("%s: %s = %%d\\n", %s);'%(indent, '', prefix, name, name), file=output)
         elif isinstance(t, RecordType):
             if not t.fields:
-                print('%*sprintf("%s: %s (empty)\\n");'%(indent, '', prefix, name), file=output) 
+                print('%*sprintf("%s: %s (empty)\\n");'%(indent, '', prefix, name), file=output)
             for i,f in enumerate(t.fields):
                 if f.isPaddingBitField():
                     continue
@@ -309,7 +308,7 @@ class TypePrinter(object):
                 if t.isVector:
                     self.printValueOfType(prefix, '((%s*) &%s)[%d]'%(t.elementType,name,i), t.elementType, output=output,indent=indent)
                 else:
-                    self.printValueOfType(prefix, '%s[%d]'%(name,i), t.elementType, output=output,indent=indent)                    
+                    self.printValueOfType(prefix, '%s[%d]'%(name,i), t.elementType, output=output,indent=indent)
         else:
             raise NotImplementedError('Cannot print value of type: "%s"'%(t,))
 
@@ -325,7 +324,7 @@ class TypePrinter(object):
             for i,f in enumerate(t.fields):
                 if f.isPaddingBitField():
                     continue
-                self.checkTypeValues('%s.field%d'%(nameLHS,i), '%s.field%d'%(nameRHS,i), 
+                self.checkTypeValues('%s.field%d'%(nameLHS,i), '%s.field%d'%(nameRHS,i),
                                      f, output=output, indent=indent)
                 if t.isUnion:
                     break
@@ -337,12 +336,12 @@ class TypePrinter(object):
                 # Access in this fashion as a hackish way to portably
                 # access vectors.
                 if t.isVector:
-                    self.checkTypeValues('((%s*) &%s)[%d]'%(t.elementType,nameLHS,i), 
-                                         '((%s*) &%s)[%d]'%(t.elementType,nameRHS,i), 
+                    self.checkTypeValues('((%s*) &%s)[%d]'%(t.elementType,nameLHS,i),
+                                         '((%s*) &%s)[%d]'%(t.elementType,nameRHS,i),
                                          t.elementType, output=output,indent=indent)
                 else:
-                    self.checkTypeValues('%s[%d]'%(nameLHS,i), '%s[%d]'%(nameRHS,i), 
-                                         t.elementType, output=output,indent=indent)                    
+                    self.checkTypeValues('%s[%d]'%(nameLHS,i), '%s[%d]'%(nameRHS,i),
+                                         t.elementType, output=output,indent=indent)
         else:
             raise NotImplementedError('Cannot print value of type: "%s"'%(t,))
 
@@ -454,7 +453,7 @@ def main():
                      help="do not use any types",
                      action="store_false", default=True)
 
-    # Tuning 
+    # Tuning
     group.add_option("", "--no-function-return", dest="functionUseReturn",
                      help="do not generate return types for functions",
                      action="store_false", default=True)
@@ -493,8 +492,8 @@ def main():
         # FIXME: Wrong size.
         if opts.useLong: ints.append(('long',4))
         if opts.useLongLong: ints.append(('long long',8))
-        if opts.useUnsigned: 
-            ints = ([('unsigned %s'%i,s) for i,s in ints] + 
+        if opts.useUnsigned:
+            ints = ([('unsigned %s'%i,s) for i,s in ints] +
                     [('signed %s'%i,s) for i,s in ints])
         builtins.extend(ints)
 
@@ -530,14 +529,14 @@ def main():
         if useBitField and opts.useBitField:
             atg.addGenerator(bftg)
         if useRecord and opts.useRecord:
-            assert subgen 
-            atg.addGenerator(RecordTypeGenerator(subfieldgen, opts.recordUseUnion, 
+            assert subgen
+            atg.addGenerator(RecordTypeGenerator(subfieldgen, opts.recordUseUnion,
                                                  opts.recordMaxSize))
         if opts.useComplex:
             # FIXME: Allow overriding builtins here
             atg.addGenerator(ComplexTypeGenerator(sbtg))
         if useArray and opts.useArray:
-            assert subgen 
+            assert subgen
             atg.addGenerator(ArrayTypeGenerator(subgen, opts.arrayMaxSize))
         if opts.useVector:
             vTypes = []
@@ -547,22 +546,22 @@ def main():
                     parser.error('Invalid vector type: %r' % t)
                 count,kind = m.groups()
                 count = int(count)
-                type = { 'i8'  : charType, 
-                         'i16' : shortType, 
-                         'i32' : intType, 
+                type = { 'i8'  : charType,
+                         'i16' : shortType,
+                         'i32' : intType,
                          'i64' : longlongType,
-                         'f32' : floatType, 
+                         'f32' : floatType,
                          'f64' : doubleType,
                          }.get(kind)
                 if not type:
                     parser.error('Invalid vector type: %r' % t)
                 vTypes.append(ArrayType(i, True, type, count * type.size))
-                
+
             atg.addGenerator(FixedTypeGenerator(vTypes))
         if opts.useEnum:
             atg.addGenerator(EnumTypeGenerator([None, '-1', '1', '1u'], 1, 4))
 
-    if opts.recordMaxDepth is None: 
+    if opts.recordMaxDepth is None:
         # Fully recursive, just avoid top-level arrays.
         subFTG = AnyTypeGenerator()
         subTG = AnyTypeGenerator()
@@ -608,12 +607,12 @@ def main():
     else:
         output = open(opts.output,'w')
         atexit.register(lambda: output.close())
-        
+
     outputHeader = None
     if opts.outputHeader:
         outputHeader = open(opts.outputHeader,'w')
         atexit.register(lambda: outputHeader.close())
-        
+
     outputTests = None
     if opts.outputTests:
         outputTests = open(opts.outputTests,'w')
@@ -632,12 +631,12 @@ def main():
 
     if opts.testLayout:
         info += '\n#include <stdio.h>'
-    
-    P = TypePrinter(output, 
+
+    P = TypePrinter(output,
                     outputHeader=outputHeader,
                     outputTests=outputTests,
                     outputDriver=outputDriver,
-                    headerName=opts.outputHeader,                    
+                    headerName=opts.outputHeader,
                     info=info)
 
     def write(N):
@@ -670,4 +669,3 @@ def main():
 
 if __name__=='__main__':
     main()
-

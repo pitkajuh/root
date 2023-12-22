@@ -1,6 +1,4 @@
 """Flexible enumeration of C types."""
-from __future__ import division, print_function
-
 from Enumeration import *
 
 # TODO:
@@ -114,7 +112,7 @@ class RecordType(Type):
         # Name the struct for more readable LLVM IR.
         return 'typedef %s %s { %s } %s;'%(('struct','union')[self.isUnion],
                                            name, ' '.join(fields), name)
-                                           
+
 class ArrayType(Type):
     def __init__(self, index, isVector, elementType, size):
         if isVector:
@@ -234,7 +232,7 @@ def fact(n):
     return result
 
 # Compute the number of combinations (n choose k)
-def num_combinations(n, k): 
+def num_combinations(n, k):
     return fact(n) // (fact(k) * fact(n - k))
 
 # Enumerate the combinations choosing k elements from the list of values
@@ -277,7 +275,7 @@ class EnumTypeGenerator(TypeGenerator):
         for enumerators in combinations(self.values, numEnumerators):
             if i == n - valuesCovered:
                 return EnumType(n, enumerators)
-                
+
             i = i + 1
 
         assert False
@@ -287,7 +285,7 @@ class ComplexTypeGenerator(TypeGenerator):
         TypeGenerator.__init__(self)
         self.typeGen = typeGen
         self.setCardinality()
-    
+
     def setCardinality(self):
         self.cardinality = self.typeGen.cardinality
 
@@ -347,7 +345,7 @@ class ArrayTypeGenerator(TypeGenerator):
             if self.useZero:
                 size = S
             else:
-                size = S + 1        
+                size = S + 1
         return ArrayType(N, False, self.typeGen.get(T), size)
 
 class RecordTypeGenerator(TypeGenerator):
@@ -382,7 +380,7 @@ class FunctionTypeGenerator(TypeGenerator):
         self.useReturn = useReturn
         self.maxSize = maxSize
         self.setCardinality()
-    
+
     def setCardinality(self):
         if self.maxSize is aleph0:
             S = aleph0 * self.typeGen.cardinality()
@@ -395,7 +393,7 @@ class FunctionTypeGenerator(TypeGenerator):
             for i in range(self.maxSize+1):
                 S += self.typeGen.cardinality ** i
         self.cardinality = S
-    
+
     def generateType(self, N):
         if self.useReturn:
             # Skip the empty tuple
@@ -415,7 +413,7 @@ class AnyTypeGenerator(TypeGenerator):
         self.bounds = []
         self.setCardinality()
         self._cardinality = None
-        
+
     def getCardinality(self):
         if self._cardinality is None:
             return aleph0

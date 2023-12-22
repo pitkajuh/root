@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Check CFC - Check Compile Flow Consistency
 
@@ -46,8 +46,6 @@ To add a new check:
 -Add the new check to check_cfc.cfg. The check has the same name as the
  subclass.
 """
-
-from __future__ import absolute_import, division, print_function
 
 import imp
 import os

@@ -1,6 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from __future__ import absolute_import, division, print_function
 import os
 import re
 import subprocess
@@ -60,14 +59,14 @@ class DeltaAlgorithm(object):
             return L,
         else:
             return L[:mid],L[mid:]
-    
+
     def delta(self, c, sets):
         # assert(reduce(set.union, sets, set()) == c)
 
         # If there is nothing left we can remove, we are done.
         if len(sets) <= 1:
             return c
-        
+
         # Look for a passing subset.
         res = self.search(c, sets)
         if res is not None:
@@ -77,7 +76,7 @@ class DeltaAlgorithm(object):
         refined = sum(map(list, map(self.split, sets)), [])
         if len(refined) == len(sets):
             return c
-        
+
         return self.delta(c, refined)
 
     def search(self, c, sets):
@@ -103,7 +102,7 @@ class Token(object):
         self.file   = file
         self.line   = line
         self.column = column
-        
+
 kTokenRE = re.compile(r"""([a-z_]+) '(.*)'\t(.*)\tLoc=<(.*):(.*):(.*)>""",
                       re.DOTALL | re.MULTILINE)
 
@@ -199,7 +198,7 @@ class TMBDDelta(DeltaAlgorithm):
         else:
             if res:
                 print('\nSUCCESS (%d tokens)' % len(changes))
-            else:                
+            else:
                 sys.stderr.write('.')
 
         return res
@@ -213,14 +212,14 @@ class TMBDDelta(DeltaAlgorithm):
             print(file=sys.stderr)
         return res
 
-def tokenBasedMultiDelta(program, files, log):            
+def tokenBasedMultiDelta(program, files, log):
     # Read in the lists of tokens.
     tokenLists = [(file, [t.data for t in getTokens(file)])
                   for file in files]
 
     numTokens = sum([len(tokens) for _,tokens in tokenLists])
     print("Delta on %s with %d tokens." % (', '.join(files), numTokens))
-    
+
     tbmd = TMBDDelta(program, tokenLists, log)
 
     res = tbmd.run()
@@ -228,7 +227,7 @@ def tokenBasedMultiDelta(program, files, log):
     print("Finished %s with %d tokens (in %d tests)." % (', '.join(tbmd.targetFiles),
                                                          len(res),
                                                          tbmd.numTests))
-        
+
 def main():
     from optparse import OptionParser, OptionGroup
     parser = OptionParser("%prog <test program> {files+}")
@@ -239,11 +238,11 @@ def main():
 
     if len(args) <= 1:
         parser.error('Invalid number of arguments.')
-        
+
     program,files = args[0],args[1:]
 
     md = tokenBasedMultiDelta(program, files, log=opts.debugLevel)
-        
+
 if __name__ == '__main__':
     try:
         main()

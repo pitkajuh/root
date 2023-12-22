@@ -1,10 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # To use:
 #  1) Update the 'decls' list below with your fuzzing configuration.
 #  2) Run with the clang binary as the command-line argument.
 
-from __future__ import absolute_import, division, print_function
 import random
 import subprocess
 import sys

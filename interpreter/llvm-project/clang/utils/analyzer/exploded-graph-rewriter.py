@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #===- exploded-graph-rewriter.py - ExplodedGraph dump tool -----*- python -*--#
 #
@@ -8,8 +8,6 @@
 #
 #===-----------------------------------------------------------------------===#
 
-
-from __future__ import print_function
 
 import argparse
 import collections
@@ -143,7 +141,7 @@ class EnvironmentFrame:
 
 
 # A deserialized Environment. This class can also hold other entities that
-# are similar to Environment, such as Objects Under Construction or 
+# are similar to Environment, such as Objects Under Construction or
 # Indices Of Elements Under Construction.
 class GenericEnvironment:
     def __init__(self, json_e):
@@ -261,7 +259,7 @@ class CheckerMessages:
 class ProgramState:
     def __init__(self, state_id, json_ps):
         logging.debug('Adding ProgramState ' + str(state_id))
-        
+
         store_key = 'store'
         env_key = 'environment'
         constraints_key = 'constraints'
@@ -309,10 +307,10 @@ class ProgramState:
             if json_ps[msg_key] is not None else None
 
         # State traits
-        # 
+        #
         # For traits we always check if a key exists because if a trait
-        # has no imformation, nothing will be printed in the .dot file 
-        # we parse. 
+        # has no imformation, nothing will be printed in the .dot file
+        # we parse.
 
         self.constructing_objects = \
             GenericEnvironment(json_ps[ctor_key]) \
@@ -321,7 +319,7 @@ class ProgramState:
         self.index_of_element = \
             GenericEnvironment(json_ps[ind_key]) \
             if ind_key in json_ps and json_ps[ind_key] is not None else None
-        
+
         self.pending_init_loops = \
             GenericEnvironment(json_ps[init_loop_key]) \
             if init_loop_key in json_ps and json_ps[init_loop_key] is not None else None

@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 """The clang static analyzer results viewer.
 """
@@ -11,11 +9,8 @@ import os
 import posixpath
 import threading
 import time
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
-import webbrowser
+from urllib.request import urlopen
+
 
 # How long to wait for server to start.
 kSleepTimeout = .05
@@ -56,7 +51,7 @@ def start_browser(port, options):
             sys.stderr.flush()
         time.sleep(kSleepTimeout)
     else:
-        print('WARNING: Unable to detect that server started.', file=sys.stderr) 
+        print('WARNING: Unable to detect that server started.', file=sys.stderr)
 
     if options.debug:
         print('%s: Starting webbrowser...' % sys.argv[0], file=sys.stderr)

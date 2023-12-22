@@ -1,36 +1,17 @@
-from __future__ import print_function
-try:
-    from http.server import HTTPServer, SimpleHTTPRequestHandler
-except ImportError:
-    from BaseHTTPServer import HTTPServer
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 import os
 import sys
-try:
-    from urlparse import urlparse
-    from urllib import unquote
-except ImportError:
-    from urllib.parse import urlparse, unquote
-
+from urllib.parse import urlparse, unquote
 import posixpath
-
-if sys.version_info.major >= 3:
-    from io import StringIO, BytesIO
-else:
-    from io import BytesIO, BytesIO as StringIO
-
+from io import StringIO, BytesIO
 import re
 import shutil
 import threading
 import time
 import socket
 import itertools
-
 import Reporter
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 
 ###
 # Various patterns matched or replaced by server.
@@ -63,12 +44,12 @@ function load(url) {
 </script>"""))
 
 # Insert additional columns.
-kReportReplacements.append((re.compile('<!-- REPORTBUGCOL -->'), 
+kReportReplacements.append((re.compile('<!-- REPORTBUGCOL -->'),
                             '<td></td><td></td>'))
 
 # Insert report bug and open file links.
 kReportReplacements.append((re.compile('<!-- REPORTBUG id="report-(.*)\\.html" -->'),
-                            ('<td class="Button"><a href="report/\\1">Report Bug</a></td>' + 
+                            ('<td class="Button"><a href="report/\\1">Report Bug</a></td>' +
                              '<td class="Button"><a href="javascript:load(\'open/\\1\')">Open File</a></td>')))
 
 kReportReplacements.append((re.compile('<!-- REPORTHEADER -->'),
@@ -134,7 +115,7 @@ class ScanViewServer(HTTPServer):
         HTTPServer.__init__(self, address, handler)
         self.root = root
         self.reporters = reporters
-        self.options = options        
+        self.options = options
         self.halted = False
         self.config = None
         self.load_config()
@@ -159,7 +140,7 @@ class ScanViewServer(HTTPServer):
         # Save on exit
         import atexit
         atexit.register(lambda: self.save_config())
-        
+
     def save_config(self):
         # Ignore errors (only called on exit).
         try:
@@ -168,7 +149,7 @@ class ScanViewServer(HTTPServer):
             f.close()
         except:
             pass
-        
+
     def halt(self):
         self.halted = True
         if self.options.debug:
@@ -226,13 +207,13 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
             SimpleHTTPRequestHandler.do_HEAD(self)
         except Exception as e:
             self.handle_exception(e)
-            
+
     def do_GET(self):
         try:
             SimpleHTTPRequestHandler.do_GET(self)
         except Exception as e:
             self.handle_exception(e)
-            
+
     def do_POST(self):
         """Serve a POST request."""
         try:
@@ -248,7 +229,7 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
                 self.copyfile(f, self.wfile)
                 f.close()
         except Exception as e:
-            self.handle_exception(e)            
+            self.handle_exception(e)
 
     def log_message(self, format, *args):
         if self.server.options.debug:
@@ -273,7 +254,7 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
         problems = []
         for item in kReportCrashEntryRE.finditer(data):
             fieldData = item.group(1)
-            fields = dict([i.groups() for i in 
+            fields = dict([i.groups() for i in
                            kReportCrashEntryKeyValueRE.finditer(fieldData)])
             problems.append(fields)
         return problems
@@ -286,8 +267,8 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
         f = self.send_string(s.getvalue(), 'text/plain')
         if f:
             self.copyfile(f, self.wfile)
-            f.close()        
-            
+            f.close()
+
     def get_scalar_field(self, name):
         if name in self.fields:
             return self.fields[name][0]
@@ -308,7 +289,7 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
             if i is None or i<0 or i>=len(c.files):
                 return (False, 'Invalid file ID')
             files.append(c.files[i])
-        
+
         if not title:
             return (False, "Missing title.")
         if not description:
@@ -317,14 +298,14 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
             reporterIndex = int(reporterIndex)
         except:
             return (False, "Invalid report method.")
-        
+
         # Get the reporter and parameters.
         reporter = self.server.reporters[reporterIndex]
         parameters = {}
         for o in reporter.getParameters():
             name = '%s_%s'%(reporter.getName(),o.getName())
             if name not in self.fields:
-                return (False, 
+                return (False,
                         'Missing field "%s" for %s report method.'%(name,
                                                                     reporter.getName()))
             parameters[o.getName()] = self.get_scalar_field(name)
@@ -359,7 +340,7 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
             fileBug = """\
 <a href="/report_crashes">File Bug</a> > """%locals()
         else:
-            reportingFor = '<a href="/%s">Report %s</a> > ' % (c.reportSource, 
+            reportingFor = '<a href="/%s">Report %s</a> > ' % (c.reportSource,
                                                                    report)
             fileBug = '<a href="/report/%s">File Bug</a> > ' % report
         title = self.get_scalar_field('title')
@@ -381,7 +362,7 @@ class ScanViewRequestHandler(SimpleHTTPRequestHandler):
 </head>
 <body>
 <h3>
-<a href="/">Summary</a> > 
+<a href="/">Summary</a> >
 %(reportingFor)s
 %(fileBug)s
 Submit</h3>
@@ -455,7 +436,7 @@ Submit</h3>
                     path = posixpath.join(self.server.root, item['stderr'])
                     if os.path.exists(path):
                         lns = itertools.islice(open(path), 0, 10)
-                        stderrSummary += '%s\n--\n%s' % (item.get('src', 
+                        stderrSummary += '%s\n--\n%s' % (item.get('src',
                                                                   '<unknown>'),
                                                          ''.join(lns))
 
@@ -471,7 +452,7 @@ STDERR Summary
             c.reportSource = None
             c.navMarkup = "Report Crashes > "
             c.files = []
-            for item in data:                
+            for item in data:
                 c.files.append(item.get('src',''))
                 c.files.append(posixpath.join(self.server.root,
                                               item.get('file','')))
@@ -486,7 +467,7 @@ STDERR Summary
             c.files = [f for f in c.files
                        if os.path.exists(f) and os.path.isfile(f)]
         else:
-            # Check that this is a valid report.            
+            # Check that this is a valid report.
             path = posixpath.join(self.server.root, 'report-%s.html' % report)
             if not posixpath.exists(path):
                 raise ValueError('Invalid report ID')
@@ -508,7 +489,7 @@ Line: %s
         return c
 
     def send_report(self, report, configOverrides=None):
-        def getConfigOption(section, field):            
+        def getConfigOption(section, field):
             if (configOverrides is not None and
                 section in configOverrides and
                 field in configOverrides[section]):
@@ -601,7 +582,7 @@ function updateReporterOptions() {
 </script>
 <body onLoad="updateReporterOptions()">
 <h3>
-<a href="/">Summary</a> > 
+<a href="/">Summary</a> >
 %(reportingFor)s
 File Bug</h3>
 <form name="form" action="/report_submit" method="post">
@@ -670,7 +651,7 @@ File Bug</h3>
 
         # Split the components and strip the root prefix.
         components = path.split('/')[1:]
-        
+
         # Special case some top-level entries.
         if components:
             name = components[0]
@@ -698,7 +679,7 @@ File Bug</h3>
                     return self.send_report(None, overrides)
                 elif name=='favicon.ico':
                     return self.send_path(posixpath.join(kShare,'bugcatcher.ico'))
-        
+
         # Match directory entries.
         if components[-1] == '':
             components[-1] = 'index.html'
@@ -720,7 +701,7 @@ File Bug</h3>
         rel = os.path.abspath(path)
         if not rel.startswith(os.path.abspath(self.server.root)):
           return self.send_404()
-        
+
         ctype = self.guess_type(path)
         if ctype.startswith('text/'):
             # Patch file instead

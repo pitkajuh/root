@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #----------------------------------------------------------------------
 # Be sure to add the python path that points to the LLDB shared library.
@@ -9,7 +9,6 @@
 #   (lldb) command script import /path/to/clandiag.py
 #----------------------------------------------------------------------
 
-from __future__ import absolute_import, division, print_function
 import lldb
 import argparse
 import shlex

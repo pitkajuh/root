@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-from __future__ import absolute_import, division, print_function
+#!/usr/bin/env python3
 import sys
 from socket import *
 from time import strftime
@@ -14,11 +13,11 @@ def main():
   port = int(sys.argv[2])
   buf = 1024 * 8
   addr = (host,port)
-  
+
   # Create socket and bind to address
   UDPSock = socket(AF_INET,SOCK_DGRAM)
   UDPSock.bind(addr)
-  
+
   print("Listing on {0}:{1} and logging to '{2}'".format(host, port, sys.argv[3]))
 
   # Open the logging file.
