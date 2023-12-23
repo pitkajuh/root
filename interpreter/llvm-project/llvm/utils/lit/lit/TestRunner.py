@@ -1,7 +1,4 @@
 from __future__ import absolute_import
-import errno
-import io
-import itertools
 import getopt
 import os, signal, subprocess, sys
 import re
@@ -12,11 +9,7 @@ import shutil
 import tempfile
 import threading
 
-import io
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 
 from lit.ShCommands import GlobItem, Command
 import lit.ShUtil as ShUtil
@@ -359,7 +352,7 @@ def executeBuiltinEcho(cmd, shenv):
             return arg
 
         arg = lit.util.to_bytes(arg)
-        codec = 'string_escape' if sys.version_info < (3,0) else 'unicode_escape'
+        codec = 'unicode_escape'
         return arg.decode(codec)
 
     if args:

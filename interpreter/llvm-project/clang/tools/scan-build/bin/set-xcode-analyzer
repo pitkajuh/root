@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # [PR 11661] Note that we hardwire to /usr/bin/python because we
 # want to the use the system version of Python on Mac OS X.
@@ -92,11 +92,7 @@ def main():
     path = options.default
     isBuiltinAnalyzer = True
 
-  try:
-    xcode_path = subprocess.check_output(["xcode-select", "-print-path"])
-  except AttributeError:
-    # Fall back to the default install location when using Python < 2.7.0
-    xcode_path = "/Developer"
+  xcode_path = subprocess.check_output(["xcode-select", "-print-path"])
   if (xcode_path.find(".app/") != -1):
     # Cut off the 'Developer' dir, as the xcspec lies in another part
     # of the Xcode.app subtree.

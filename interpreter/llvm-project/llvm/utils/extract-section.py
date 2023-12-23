@@ -17,15 +17,13 @@ content as well as providing more formatting options.
 # Unfortunately reading binary from stdin is not so trivial in Python...
 def read_raw_stdin():
     import sys
-    if sys.version_info >= (3, 0):
-        reading_source = sys.stdin.buffer
-    else:
-        # Windows will always read as string so we need some
-        # special handling
-        if sys.platform == 'win32':
-            import os, msvcrt
-            msvcrt.setformat(sys.stdin.fileno(), os.O_BINARY)
-        reading_source = sys.stdin
+
+    reading_source = sys.stdin.buffer
+
+    if sys.platform == 'win32':
+        import os, msvcrt
+        msvcrt.setformat(sys.stdin.fileno(), os.O_BINARY)
+
     return reading_source.read()
 
 def get_raw_section_dump(readobj_path, section_name, input_file):

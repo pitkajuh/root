@@ -1,12 +1,6 @@
 import re
 from . import common
-import sys
-
-if sys.version_info[0] > 2:
-  class string:
-    expandtabs = str.expandtabs
-else:
-  import string
+import string
 
 # Support of isel debug checks
 # RegEx: this is where the magic happens.

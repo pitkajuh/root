@@ -9,7 +9,6 @@ import optrecord
 import argparse
 import operator
 from collections import defaultdict
-# from multiprocessing import cpu_count, Pool
 
 try:
     from guppy import hpy
