@@ -18,11 +18,8 @@ that are common between different commands will be left as-is by
 default, or removed if the --remove-common-prefixes flag is provided.
 """
 
-from __future__ import print_function
-
 import argparse
 import collections
-import glob
 import os
 import re
 import subprocess

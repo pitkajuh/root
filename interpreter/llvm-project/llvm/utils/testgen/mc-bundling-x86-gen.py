@@ -1,5 +1,5 @@
 
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Auto-generates an exhaustive and repetitive test for correct bundle-locked
 # alignment on x86.
@@ -9,9 +9,8 @@
 # Run with --align-to-end to generate a similar test with align_to_end for each
 # .bundle_lock directive.
 
-# This script runs with Python 2.7 and 3.2+
+# This script runs with Python 3.2+
 
-from __future__ import print_function
 import argparse
 
 BUNDLE_SIZE_POW2 = 4

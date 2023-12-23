@@ -1,11 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 Summarize the information in the given coverage files.
 
 Emits the number of rules covered or the percentage of rules covered depending
 on whether --num-rules has been used to specify the total number of rules.
 """
-from __future__ import print_function
 
 import argparse
 import struct

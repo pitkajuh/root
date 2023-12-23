@@ -12,8 +12,6 @@ Usage:
 % utils/update_cc_test_checks.py --clang=release/bin/clang /tmp/c/a.cc
 '''
 
-from __future__ import print_function
-
 import argparse
 import collections
 import json

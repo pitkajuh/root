@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """A tool for extracting a list of symbols to export
 
@@ -15,7 +15,6 @@ files (i.e. template instantiations) and we would get defined in the thing
 importing these symbols anyway.
 """
 
-from __future__ import print_function
 import sys
 import re
 import os

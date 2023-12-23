@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 class TimingScriptGenerator:
     """Used to generate a bash script which will invoke the toy and time it"""
@@ -63,7 +61,7 @@ def splitScript(inputname, libGenScript, timingScript):
 libGenScript = LibScriptGenerator("make-libs.sh")
 timingScript = TimingScriptGenerator("time-lib.sh", "lib-timing.txt")
 
-script_list = ["test-5000-3-50-50.k", "test-5000-10-100-10.k", "test-5000-10-5-10.k", "test-5000-10-1-0.k", 
+script_list = ["test-5000-3-50-50.k", "test-5000-10-100-10.k", "test-5000-10-5-10.k", "test-5000-10-1-0.k",
                "test-1000-3-10-50.k", "test-1000-10-100-10.k", "test-1000-10-5-10.k", "test-1000-10-1-0.k",
                "test-200-3-2-50.k", "test-200-10-40-10.k", "test-200-10-2-10.k", "test-200-10-1-0.k"]
 

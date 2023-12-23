@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #this is a script to extract given named nodes from a dot file, with
 #the associated edges.  An edge is kept iff for edge x -> y
@@ -18,14 +18,12 @@
 #as a parameter this script will pull out all COLLAPSED
 #nodes in the file
 
-#Specifying escape characters in the name like \n also will not work, 
+#Specifying escape characters in the name like \n also will not work,
 #as Python
 #will make it \\n, I'm not really sure how to fix this
 
 #currently the script prints the names it is searching for
 #to STDOUT, so you can check to see if they are what you intend
-
-from __future__ import print_function
 
 import re
 import string
@@ -44,7 +42,7 @@ node_name_set = set()
 for name in sys.argv[3:]:
 	node_name_set |= set([name])
 
-#construct a list of compiled regular expressions from the 
+#construct a list of compiled regular expressions from the
 #node_name_set
 regexp_list = []
 for name in node_name_set:
@@ -78,7 +76,7 @@ while buffer != '':
 print(node_name_set)
 
 #print node_set
-	
+
 
 #open the output file
 output = open(sys.argv[2], 'w')
@@ -89,7 +87,7 @@ buffer = input.readline()
 while buffer != '':
 	#there are three types of lines we are looking for
 	#1) node lines, 2) edge lines 3) support lines (like page size, etc)
-	
+
 	#is this an edge line?
 	#note that this is no completely robust, if a none edge line
 	#for some reason contains -> it will be missidentified
@@ -110,4 +108,3 @@ while buffer != '':
 	else: #this is a support line
 		output.write(buffer)
 	buffer = input.readline()
-

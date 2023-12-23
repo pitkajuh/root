@@ -1,15 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-#changelog: 
+#changelog:
 #10/13/2005b: replaced the # in tmp(.#*)* with alphanumeric and _, this will then remove
 #nodes such as %tmp.1.i and %tmp._i.3
-#10/13/2005: exntended to remove variables of the form %tmp(.#)* rather than just 
+#10/13/2005: exntended to remove variables of the form %tmp(.#)* rather than just
 #%tmp.#, i.e. it now will remove %tmp.12.3.15 etc, additionally fixed a spelling error in
 #the comments
 #10/12/2005: now it only removes nodes and edges for which the label is %tmp.# rather
 #than removing all lines for which the lable CONTAINS %tmp.#
-
-from __future__ import print_function
 
 import re
 import sys

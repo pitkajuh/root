@@ -4,8 +4,6 @@
 # demanglings.  Useful for stress testing the demangler against a large corpus
 # of inputs.
 
-from __future__ import print_function
-
 import argparse
 import functools
 import os
@@ -202,7 +200,7 @@ def go():
         print("{0}/{1} symbols successfully demangled ({2:.4%})".format(nsuccess, total.nsymbols, spct))
         print("{0} symbols could not be demangled ({1:.4%})".format(nfailed, fpct))
         print("{0} files crashed while demangling ({1:.4%})".format(ncrashed, cpct))
-            
+
     except:
         traceback.print_exc()
 
@@ -225,4 +223,3 @@ if __name__ == "__main__":
 
     multiprocessing.freeze_support()
     go()
-

@@ -21,8 +21,6 @@ Other options:
     --host host_name - host name to bind server to (127.0.0.1)
 '''
 
-from __future__ import print_function
-
 import argparse
 import http.server
 import json
@@ -143,7 +141,7 @@ class ServerHandler(http.server.BaseHTTPRequestHandler):
                 filelist.append(
                         "<tr><td><a href=\"./{name}\">{name}</a></td>"
                         "<td>{coverage}%</td></tr>".format(
-                            name=html.escape(filename, quote=True), 
+                            name=html.escape(filename, quote=True),
                             coverage=format_pct(file_coverage)))
 
             response = string.Template(INDEX_PAGE_TMPL).safe_substitute(
@@ -151,7 +149,7 @@ class ServerHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(response.encode('UTF-8', 'replace'))
         elif self.symcov_data.has_file(norm_path):
             filename = norm_path
-            filepath = os.path.join(self.src_path, filename) 
+            filepath = os.path.join(self.src_path, filename)
             if not os.path.exists(filepath):
                 self.send_response(404)
                 self.end_headers()
@@ -166,7 +164,7 @@ class ServerHandler(http.server.BaseHTTPRequestHandler):
             with open(filepath, 'r', encoding='utf8') as f:
                 content = "\n".join(
                         ["<span class='{cls}'>{line}&nbsp;</span>".format(
-                            line=html.escape(line.rstrip()), 
+                            line=html.escape(line.rstrip()),
                             cls=linemap.get(line_no, ""))
                             for line_no, line in enumerate(f, start=1)])
 

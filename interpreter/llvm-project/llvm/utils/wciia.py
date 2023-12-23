@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 wciia - Whose Code Is It Anyway
 
 Determines code owner of the file/folder relative to the llvm source root.
-Code owner is determined from the content of the CODE_OWNERS.TXT 
+Code owner is determined from the content of the CODE_OWNERS.TXT
 by parsing the D: field
 
 usage:
@@ -14,12 +14,11 @@ limitations:
 - must be run from llvm source root
 - very simplistic algorithm
 - only handles * as a wildcard
-- not very user friendly 
+- not very user friendly
 - does not handle the proposed F: field
 
 """
 
-from __future__ import print_function
 import os
 
 code_owners = {}

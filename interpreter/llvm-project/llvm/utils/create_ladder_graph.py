@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """A ladder graph creation program.
 
 This is a python program that creates c source code that will generate
@@ -9,8 +9,6 @@ and often generate N^2 or worse behavior.
 One good use of this program is to test whether your linear time algorithm is
 really behaving linearly.
 """
-
-from __future__ import print_function
 
 import argparse
 def main():

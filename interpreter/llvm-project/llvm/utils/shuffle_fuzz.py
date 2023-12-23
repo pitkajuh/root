@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """A shuffle vector fuzz tester.
 
@@ -12,8 +12,6 @@ Take the output IR printed to stdout, compile it to an executable using whatever
 set of transforms you want to test, and run the program. If it crashes, it found
 a bug.
 """
-
-from __future__ import print_function
 
 import argparse
 import itertools

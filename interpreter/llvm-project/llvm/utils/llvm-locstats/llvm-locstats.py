@@ -1,11 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # This is a tool that works like debug location coverage calculator.
 # It parses the llvm-dwarfdump --statistics output by reporting it
 # in a more human readable way.
 #
 
-from __future__ import print_function
 import argparse
 import os
 import sys

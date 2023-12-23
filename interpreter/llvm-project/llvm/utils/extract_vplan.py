@@ -1,10 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This script extracts the VPlan digraphs from the vectoriser debug messages
 # and saves them in individual dot files (one for each plan). Optionally, and
 # providing 'dot' is installed, it can also render the dot into a PNG file.
-
-from __future__ import print_function
 
 import sys
 import re

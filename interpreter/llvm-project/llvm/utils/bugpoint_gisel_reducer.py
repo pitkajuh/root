@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Reduces GlobalISel failures.
 
@@ -10,7 +10,6 @@ a custom command to check that specific error. Then, it runs bugpoint
 with the custom command.
 
 """
-from __future__ import print_function
 import argparse
 import re
 import subprocess

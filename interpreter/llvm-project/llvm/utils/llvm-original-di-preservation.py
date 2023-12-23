@@ -1,11 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Debugify summary for the original debug info testing.
 #
 
-from __future__ import print_function
 import argparse
-import os
 import sys
 from json import loads
 from collections import defaultdict

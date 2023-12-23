@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Common lint functions applicable to multiple types of files.
 
-from __future__ import print_function
 import re
 
 def VerifyLineLength(filename, lines, max_length):
