@@ -26,7 +26,7 @@ import argparse
 # This is for timeout support. Use the recommended way of import.
 # We do timeouts because when doing, execution testing, we have a habit
 # of finding variants that infinite loop
-if os.name == 'posix' and sys.version_info[0] < 3:
+if os.name == 'posix':
   import subprocess32 as subprocess
 else:
   import subprocess

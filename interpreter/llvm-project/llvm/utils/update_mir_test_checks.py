@@ -19,7 +19,7 @@ default, or removed if the --remove-common-prefixes flag is provided.
 """
 
 import argparse
-import collections
+# import collections
 import os
 import re
 import subprocess
@@ -70,8 +70,7 @@ class LLC:
         with open(ir) as ir_file:
             stdout = subprocess.check_output('{} {}'.format(self.bin, args),
                                              shell=True, stdin=ir_file)
-            if sys.version_info[0] > 2:
-              stdout = stdout.decode()
+            stdout = stdout.decode()
             # Fix line endings to unix CR style.
             stdout = stdout.replace('\r\n', '\n')
         return stdout

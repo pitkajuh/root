@@ -5,7 +5,7 @@
 
 import argparse
 import sys
-from json import loads
+# from json import loads
 from collections import defaultdict
 from collections import OrderedDict
 

@@ -1,13 +1,7 @@
 import re
 import sys
-
 from . import common
-
-if sys.version_info[0] > 2:
-  class string:
-    expandtabs = str.expandtabs
-else:
-  import string
+import string
 
 # RegEx: this is where the magic happens.
 

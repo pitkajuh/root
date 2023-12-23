@@ -5,13 +5,13 @@ import errno
 import functools
 import html
 import io
-from multiprocessing import cpu_count
+# from multiprocessing import cpu_count
 import os.path
 import re
 import shutil
 import sys
 
-from pygments import highlight
+# from pygments import highlight
 from pygments.lexers.c_cpp import CppLexer
 from pygments.formatters import HtmlFormatter
 

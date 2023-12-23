@@ -8,7 +8,7 @@
 import argparse
 import os
 import sys
-from json import loads
+# from json import loads
 from math import ceil
 from collections import OrderedDict
 from subprocess import Popen, PIPE
