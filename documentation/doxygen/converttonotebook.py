@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Author: Pau Miquel i Mir <pau.miquel.mir@cern.ch> <pmm1g15@soton.ac.uk>>
 # Date: July, 2016
 #
@@ -61,10 +61,9 @@ import sys
 import json
 import time
 import doctest
-import textwrap
 import subprocess
 from nbformat import v3, v4
-from datetime import datetime, date
+from datetime import datetime
 import statistics
 
 # -------------------------------------
@@ -400,7 +399,7 @@ def findBracedBlock(text, startpos, openingBraceChar):
 
     begin = None
     bracketRe = re.compile(braceRegex[openingBraceChar], flags = re.DOTALL | re.MULTILINE)
-  
+
     while True:
         lastMatch = bracketRe.search(text, startpos)
         if lastMatch:
@@ -411,7 +410,7 @@ def findBracedBlock(text, startpos, openingBraceChar):
 
             depth += 1 if lastMatch.group(0) == openingBraceChar else -1
             startpos = lastMatch.end()
-            
+
             if depth == 0:
                 ret = (begin,lastMatch.end()-1)
                 begin = None
@@ -481,14 +480,14 @@ def split(text):
     main = ""
     searchStart = 0
     for curlyBegin,curlyEnd in findBracedBlock(text, 0, "{"):
-        functionMatches = [match for match in functionRe.finditer(text, searchStart, curlyBegin)] 
-        
+        functionMatches = [match for match in functionRe.finditer(text, searchStart, curlyBegin)]
+
         tailMatch = tailRe.match(text, curlyEnd)
         if tailMatch:
             curlyEnd = tailMatch.end()
         else:
             sys.stderr.write("Failed match on " + text[curlyEnd:curlyEnd+10])
-        
+
         if not functionMatches:
             definitions.append("%%cpp -d\n" + text[searchStart:curlyEnd])
             searchStart = curlyEnd+1
@@ -791,14 +790,14 @@ def mainfunction(text):
             "language_info": {
                 "codemirror_mode": {
                     "name": "ipython",
-                    "version": 2
+                    "version": 3
                 },
                 "file_extension": ".py",
                 "mimetype": "text/x-python",
                 "name": "python",
                 "nbconvert_exporter": "python",
-                "pygments_lexer": "ipython2",
-                "version": "2.7.10"
+                "pygments_lexer": "ipython3",
+                "version": "3"
             }
         }
     elif isCpp():

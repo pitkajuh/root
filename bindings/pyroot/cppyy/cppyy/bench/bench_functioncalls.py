@@ -1,4 +1,4 @@
-import py, pytest, os, sys, math, warnings
+import py, pytest, warnings
 from support import setup_make
 
 
@@ -17,8 +17,6 @@ all_configs = [('py', 'py_functioncalls'), ('cppyy', 'cppyy.gbl')]
 N = 10000
 preamble = "@pytest.mark.benchmark(group=group, warmup=True)"
 looprange = range
-if sys.hexversion < 0x3000000:
-    looprange = xrange
 
 try:
     import __pypy__

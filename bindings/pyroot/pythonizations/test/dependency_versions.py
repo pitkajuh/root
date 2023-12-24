@@ -2,7 +2,6 @@ import unittest
 import pkg_resources
 import subprocess
 import os
-import sys
 
 
 # Compile list of packages to be ignored in the test

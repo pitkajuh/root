@@ -12,7 +12,6 @@ import importlib
 import inspect
 import pkgutil
 import re
-import sys
 import traceback
 
 import cppyy
