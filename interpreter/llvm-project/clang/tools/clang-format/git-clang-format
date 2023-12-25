@@ -419,10 +419,7 @@ def run_clang_format_and_save_to_tree(changed_lines, revision=None,
   # files have to be read from the original index.
   env = os.environ.copy() if revision == '' else None
   def iteritems(container):
-      try:
-          return container.iteritems() # Python 2
-      except AttributeError:
-          return container.items() # Python 3
+    return container.items()
   def index_info_generator():
     for filename, line_ranges in iteritems(changed_lines):
       if revision is not None:

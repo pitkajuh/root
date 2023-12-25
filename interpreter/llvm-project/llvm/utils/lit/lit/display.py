@@ -123,15 +123,8 @@ class Display(object):
             # as part of the encode call if out is already encoded, so skip
             # encoding if it raises UnicodeDecodeError.
             if sys.stdout.encoding:
-                try:
-                    out = out.encode(encoding=sys.stdout.encoding,
-                                     errors="replace")
-                except UnicodeDecodeError:
-                    pass
-                # Python 2 can raise UnicodeDecodeError here too in cases
-                # where the stdout encoding is ASCII. Ignore decode errors
-                # in this case.
-                out = out.decode(encoding=sys.stdout.encoding, errors="ignore")
+                out = out.encode(encoding=sys.stdout.encoding,
+                                 errors="replace")
             print(out)
             print("*" * 20)
 

@@ -295,7 +295,7 @@ def invoke_tool(exe, cmd_args, ir, preprocess_cmd=None, verbose=False):
       if verbose:
         print('Pre-processing input file: ', ir, " with command '",
               preprocess_cmd, "'", sep="", file=sys.stderr)
-      # Python 2.7 doesn't have subprocess.DEVNULL:
+
       with open(os.devnull, 'w') as devnull:
         pp = subprocess.Popen(preprocess_cmd, shell=True, stdin=devnull,
                               stdout=subprocess.PIPE)
