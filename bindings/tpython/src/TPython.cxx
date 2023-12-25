@@ -153,11 +153,8 @@ Bool_t TPython::Initialize()
 #endif
 
 // set the command line arguments on python's sys.argv
-#if PY_VERSION_HEX < 0x03000000
-      char *argv[] = {const_cast<char *>("root")};
-#else
       wchar_t *argv[] = {const_cast<wchar_t *>(L"root")};
-#endif
+
       int argc = sizeof(argv) / sizeof(argv[0]);
 #if PY_VERSION_HEX < 0x030b0000
       Py_Initialize();
@@ -294,14 +291,10 @@ void TPython::LoadMacro(const char *name)
    PyObject *old = PyDict_Values(gMainDict);
 
 // actual execution
-#if PY_VERSION_HEX < 0x03000000
-   Exec((std::string("execfile(\"") + name + "\")").c_str());
-#else
    Exec((std::string("__pyroot_f = open(\"") + name + "\"); "
                                                       "exec(__pyroot_f.read()); "
                                                       "__pyroot_f.close(); del __pyroot_f")
            .c_str());
-#endif
 
    // obtain new __main__ contents
    PyObject *current = PyDict_Values(gMainDict);
