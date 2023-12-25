@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# Given a -print-before-all and/or -print-after-all -print-module-scope log from 
-# an opt invocation, chunk it into a series of individual IR files, one for each 
-# pass invocation. If the log ends with an obvious stack trace, try to split off 
-# a separate "crashinfo.txt" file leaving only the valid input IR in the last 
+# Given a -print-before-all and/or -print-after-all -print-module-scope log from
+# an opt invocation, chunk it into a series of individual IR files, one for each
+# pass invocation. If the log ends with an obvious stack trace, try to split off
+# a separate "crashinfo.txt" file leaving only the valid input IR in the last
 # chunk. Files are written to current working directory.
 
 import sys

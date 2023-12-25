@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import urllib.request
 import sys
@@ -33,7 +33,7 @@ def getFileTextFromURL(link):
 
 def fixedParticleData(infoLine):
     elements = infoLine.split()
-    
+
     name = elements[1]
     trueId = int(elements[2])
 
@@ -42,7 +42,7 @@ def fixedParticleData(infoLine):
     else:  # If it's not an Antiparticle
         mass = float(elements[7])
         width = float(elements[8])
-            
+
         if 0 <= trueId < len(massWidthData):
             if (massWidthData[trueId] is not None):
                 if (massWidthData[trueId].mass is not None):
@@ -71,7 +71,7 @@ def getMassWidthValues(lines):
             mass = line[MASS_WIDTH_MASS_START:MASS_WIDTH_MASS_END].strip()
         else:
             mass = 0.0  # No value is given
-        
+
         if line[MASS_WIDTH_WIDTH_START:MASS_WIDTH_WIDTH_END].strip():
             width = line[MASS_WIDTH_WIDTH_START:MASS_WIDTH_WIDTH_END].strip()
         else:
@@ -85,7 +85,7 @@ def getMassWidthValues(lines):
             while (len(data) <= particleId):
                 data.append(None)
         data[particleId] = MWDataObj(float(mass), float(width), name)
-        
+
     return data
 
 #------------------------------

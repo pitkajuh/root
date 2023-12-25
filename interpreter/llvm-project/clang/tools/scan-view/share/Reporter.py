@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """Methods for reporting bugs."""
@@ -11,7 +11,7 @@ __all__ = ['ReportFailure', 'BugReport', 'getReporters']
 
 class ReportFailure(Exception):
     """Generic exception for failures in bug reporting."""
-    def __init__(self, value):        
+    def __init__(self, value):
         self.value = value
 
 # Collect information about a bug.
@@ -59,7 +59,7 @@ class SelectionParameter (ReporterParameter):
   def __init__(self, n, values):
     ReporterParameter.__init__(self,n)
     self.values = values
-    
+
   def getHTML(self,r,bugtype,getConfigOption):
     default = self.getValue(r,bugtype,getConfigOption)
     return """\
@@ -146,24 +146,24 @@ Description: %s
 class BugzillaReporter(object):
     def getName(self):
         return 'Bugzilla'
-    
+
     def getParameters(self):
         return [TextParameter(x) for x in ['URL','Product']]
 
     def fileReport(self, report, parameters):
         raise NotImplementedError
- 
+
 
 class RadarClassificationParameter(SelectionParameter):
   def __init__(self):
     SelectionParameter.__init__(self,"Classification",
             [['1', 'Security'], ['2', 'Crash/Hang/Data Loss'],
-             ['3', 'Performance'], ['4', 'UI/Usability'], 
+             ['3', 'Performance'], ['4', 'UI/Usability'],
              ['6', 'Serious Bug'], ['7', 'Other']])
 
   def saveConfigValue(self):
     return False
-    
+
   def getValue(self,r,bugtype,getConfigOption):
     if bugtype.find("leak") != -1:
       return '3'
@@ -180,4 +180,3 @@ def getReporters():
     reporters = []
     reporters.append(EmailReporter())
     return reporters
-

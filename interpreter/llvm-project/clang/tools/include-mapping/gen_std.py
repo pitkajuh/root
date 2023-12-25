@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #===- gen_std.py -  ------------------------------------------*- python -*--===#
 #
 # Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
@@ -65,7 +65,7 @@ def ParseArg():
   parser.add_argument('-symbols',
                       default='cpp',
                       help='Generate c or cpp (removed) symbols. One of {cpp, c, cpp_removed}.',
-                      required=True) 
+                      required=True)
   return parser.parse_args()
 
 
@@ -96,13 +96,13 @@ def main():
   elif args.symbols == 'c':
     page_root = os.path.join(args.cppreference, "en", "c")
     symbol_index_root = page_root
-    parse_pages = [(page_root, "index.html", None)]  
-    
+    parse_pages = [(page_root, "index.html", None)]
+
   if not os.path.exists(symbol_index_root):
     exit("Path %s doesn't exist!" % symbol_index_root)
 
   symbols = cppreference_parser.GetSymbols(parse_pages)
-  
+
   # We don't have version information from the unzipped offline HTML files.
   # so we use the modified time of the symbol_index.html as the version.
   index_page_path = os.path.join(page_root, "index.html")
