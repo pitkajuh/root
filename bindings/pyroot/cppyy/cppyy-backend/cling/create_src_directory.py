@@ -2,7 +2,7 @@
 
 import os, sys, subprocess
 import shutil, tarfile
-import urllib.request as urllib2  # p3
+import urllib.request as urllib2
 
 if 'win32' in sys.platform:
     def rename(f1, f2):

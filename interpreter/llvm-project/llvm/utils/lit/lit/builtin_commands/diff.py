@@ -59,11 +59,7 @@ def compareTwoBinaryFiles(flags, filepaths, filelines):
                                    n = flags.num_context_lines)
         diffs = [diff.decode(errors="backslashreplace") for diff in diffs]
     else:
-        # python 2.7
-        if flags.unified_diff:
-            func = difflib.unified_diff
-        else:
-            func = difflib.context_diff
+        func = difflib.context_diff
         diffs = func(filelines[0], filelines[1], filepaths[0], filepaths[1],
                      n = flags.num_context_lines)
 
@@ -182,12 +178,7 @@ def compareDirTrees(flags, dir_trees, base_paths=["", ""]):
 def main(argv):
     if sys.platform == "win32":
         if hasattr(sys.stdout, 'buffer'):
-            # python 3
             sys.stdout = io.TextIOWrapper(sys.stdout.buffer, newline='\n')
-        else:
-            # python 2.7
-            import msvcrt
-            msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
     args = argv[1:]
     try:
         opts, args = getopt.gnu_getopt(args, "wbuU:r", ["strip-trailing-cr"])
