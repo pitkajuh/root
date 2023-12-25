@@ -150,7 +150,7 @@ static inline const char* CPyCppyy_PyText_AsStringAndSize(PyObject* pystr, Py_ss
 #define CPyCppyy_PySliceCast   PySliceObject*
 #endif  // >= 3.2
 
-// API changes in 2.5 (int -> Py_ssize_t) and 3.2 (PyUnicodeObject -> PyObject)
+// API changes in 3.2 (PyUnicodeObject -> PyObject)
 #if PY_VERSION_HEX < 0x03020000
 static inline Py_ssize_t CPyCppyy_PyUnicode_AsWideChar(PyObject* pyobj, wchar_t* w, Py_ssize_t size)
 {
