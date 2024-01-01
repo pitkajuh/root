@@ -40,6 +40,7 @@ origin/release/12.x) are deduplicated in output.
 """
 
 import argparse
+import collections
 import logging
 import re
 import subprocess

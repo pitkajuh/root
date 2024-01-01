@@ -6,7 +6,7 @@
 ##
 ## \author Wim Lavrijsen
 
-import ROOT
+import os, sys, ROOT
 
 def pygaus( x, par ):
    import math

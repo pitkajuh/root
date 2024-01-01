@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import re, sys
+import re, string, sys, os, time
 
 DEBUG = 0
 testDirName = 'llvm-test'

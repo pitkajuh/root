@@ -1,4 +1,4 @@
-import py
+import py, os, sys
 from pytest import raises
 
 try:

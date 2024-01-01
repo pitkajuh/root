@@ -18,11 +18,13 @@ Talks to Cling via ctypes
 __version__ = '0.0.3'
 
 import ctypes
+from contextlib import contextmanager
 from fcntl import fcntl, F_GETFL, F_SETFL
 import os
 import shutil
 import select
 import struct
+import sys
 import threading
 
 from traitlets import Unicode, Float, Dict, List, CaselessStrEnum

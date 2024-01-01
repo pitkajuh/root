@@ -1,4 +1,4 @@
-import py, os
+import py, os, sys
 from pytest import mark, raises
 from .support import setup_make
 

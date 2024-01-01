@@ -19,6 +19,8 @@ default, or removed if the --remove-common-prefixes flag is provided.
 """
 
 import argparse
+import collections
+import glob
 import os
 import re
 import subprocess

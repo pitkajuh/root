@@ -1,5 +1,6 @@
 """Contains helper functions to compute checksums for LLVM checkouts.
 """
+import logging
 import os
 import os.path
 import sys

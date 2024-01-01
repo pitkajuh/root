@@ -2,6 +2,7 @@
 
 ### generate COnv2d model using Pytorch
 
+import numpy as np
 import argparse
 import torch
 import torch.nn as nn

@@ -1,4 +1,4 @@
-import sys, subprocess
+import os, sys, subprocess
 
 target = sys.argv[1]
 output = sys.argv[2]

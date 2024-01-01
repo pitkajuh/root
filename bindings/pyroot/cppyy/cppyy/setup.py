@@ -1,4 +1,4 @@
-import codecs, os, sys, re
+import codecs, glob, os, sys, re
 from setuptools import setup, find_packages, Extension
 from distutils import log
 

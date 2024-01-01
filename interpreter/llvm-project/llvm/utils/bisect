@@ -12,6 +12,8 @@
 # And bisect will continually call ./script.sh with various counts using
 # the exit status to determine success and failure.
 #
+import os
+import sys
 import argparse
 import subprocess
 

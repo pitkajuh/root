@@ -11,7 +11,6 @@
 # For the list of contributors see $ROOTSYS/README/CREDITS.                    #
 ################################################################################
 
-import sys
 import cppyy
 
 from .. import pythonization
