@@ -35,8 +35,7 @@ gettext.install(__name__)
 _ = _
 
 
-PRIMITIVE_TYPES = re.compile(r"\b(bool|char|short|int|unsigned|float|double)\b")
-
+PRIMITIVE_TYPES = re.compile(r"\b(bool|char|short|int|unsigned|long|float|double)\b")
 
 def add_pythonizations(py_files, noisy=False):
     for py_file in py_files:

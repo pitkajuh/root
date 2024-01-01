@@ -190,10 +190,8 @@ bool JupyROOTDeclarerImpl(const char *code)
    return status;
 }
 
-#if PY_MAJOR_VERSION >= 3
-    #define PyInt_FromLong PyLong_FromLong
-    #define PyText_FromString PyUnicode_FromString
-#endif
+#define PyInt_FromLong PyLong_FromLong
+#define PyText_FromString PyUnicode_FromString
 
 PyObject *JupyROOTExecutor(PyObject * /*self*/, PyObject * args)
 {
