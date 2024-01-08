@@ -1004,7 +1004,7 @@ def executeScript(test, litConfig, tmpBase, commands, cwd):
     open_kwargs = {}
     if litConfig.isWindows and not isWin32CMDEXE:
         mode += 'b'  # Avoid CRLFs when writing bash scripts.
-    elif sys.version_info > (3,0):
+    else:
         open_kwargs['encoding'] = 'utf-8'
     f = open(script, mode, **open_kwargs)
     if isWin32CMDEXE:
@@ -1031,7 +1031,7 @@ def executeScript(test, litConfig, tmpBase, commands, cwd):
             f.write(b'set -o pipefail;' if mode == 'wb' else 'set -o pipefail;')
         if litConfig.echo_all_commands:
             f.write(b'set -x;' if mode == 'wb' else 'set -x;')
-        if sys.version_info > (3,0) and mode == 'wb':
+        if mode == 'wb':
             f.write(bytes('{ ' + '; } &&\n{ '.join(commands) + '; }', 'utf-8'))
         else:
             f.write('{ ' + '; } &&\n{ '.join(commands) + '; }')
