@@ -5,10 +5,8 @@
 
 import collections
 import re
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from urllib.request import urlopen
+
 
 CLASS_INDEX_PAGE_URL = 'https://clang.llvm.org/doxygen/classes.html'
 try:
@@ -95,11 +93,11 @@ def strip_doxygen(comment):
   """Returns the given comment without \-escaped words."""
   # If there is only a doxygen keyword in the line, delete the whole line.
   comment = re.sub(r'^\\[^\s]+\n', r'', comment, flags=re.M)
-  
+
   # If there is a doxygen \see command, change the \see prefix into "See also:".
   # FIXME: it would be better to turn this into a link to the target instead.
   comment = re.sub(r'\\see', r'See also:', comment)
-  
+
   # Delete the doxygen command and the following whitespace.
   comment = re.sub(r'\\[^\s]+\s+', r'', comment)
   return comment
@@ -157,7 +155,7 @@ def add_matcher(result_type, name, args, comment, is_dyncast=False):
   else:
     dict = traversal_matchers
     lookup = result_type + name + esc(args)
-  
+
   if dict.get(lookup) is None or len(dict.get(lookup)) < len(matcher_html):
     dict[lookup] = matcher_html
 
@@ -376,7 +374,7 @@ Flags can be combined with '|' example \"IgnoreCase | BasicRegex\"
       for result_type in result_types:
         add_matcher(result_type, name, '%s, ..., %s' % (arg, arg), comment)
       return
-      
+
 
     # Parse Variadic operator matchers.
     m = re.match(
@@ -403,7 +401,7 @@ Flags can be combined with '|' example \"IgnoreCase | BasicRegex\"
 
     # Parse free standing matcher functions, like:
     #   Matcher<ResultType> Name(Matcher<ArgumentType> InnerMatcher) {
-    m = re.match(r"""^\s*(?:template\s+<\s*(?:class|typename)\s+(.+)\s*>\s+)?   
+    m = re.match(r"""^\s*(?:template\s+<\s*(?:class|typename)\s+(.+)\s*>\s+)?
                      (.*)\s+
                      ([^\s\(]+)\s*\(
                      (.*)
@@ -444,7 +442,7 @@ def sort_table(matcher_type, matcher_map):
   for key in sorted(matcher_map.keys()):
     table += matcher_map[key] + '\n'
   return ('<!-- START_%(type)s_MATCHERS -->\n' +
-          '%(table)s' + 
+          '%(table)s' +
           '<!--END_%(type)s_MATCHERS -->') % {
     'type': matcher_type,
     'table': table,
@@ -479,7 +477,7 @@ for line in open(MATCHERS_FILE).read().splitlines():
     comment += re.sub(r'^/+\s?', '', line) + '\n'
   else:
     declaration += ' ' + line
-    if ((not line.strip()) or 
+    if ((not line.strip()) or
         line.rstrip()[-1] == ';' or
         (line.rstrip()[-1] == '{' and line.rstrip()[-3:] != '= {')):
       if line.strip() and line.rstrip()[-1] == '{':
@@ -504,4 +502,3 @@ reference = re.sub(r'<!-- START_TRAVERSAL_MATCHERS.*END_TRAVERSAL_MATCHERS -->',
 
 with open('../LibASTMatchersReference.html', 'w', newline='\n') as output:
   output.write(reference)
-
