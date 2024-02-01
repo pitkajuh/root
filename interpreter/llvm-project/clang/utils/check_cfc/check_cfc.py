@@ -54,6 +54,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import io
 import configparser
 import obj_diff
 
