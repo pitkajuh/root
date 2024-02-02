@@ -697,7 +697,7 @@ template<> struct typecode_traits<unsigned int> {
     static constexpr const char* format = "I"; static constexpr const char* name = "unsigned int"; };
 template<> struct typecode_traits<long> {
     static constexpr const char* format = "l"; static constexpr const char*
-    name = "long";
+    name = "int";
 };
 template<> struct typecode_traits<unsigned long> {
     static constexpr const char* format = "L"; static constexpr const char* name = "unsigned long"; };
